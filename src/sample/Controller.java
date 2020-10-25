@@ -52,6 +52,11 @@ public class Controller {
     private void setLink(ActionEvent event) {
         event.consume();
         System.out.println(Countries.getText());
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+        webEngine.load("https://www.oetkercollection.com/fr/hotels/le-bristol-paris/restaurants-et-bar/restaurants/epicure/");
+        webEngine.setJavaScriptEnabled(true);
+        MapPlacer.setCenter(browser);
     }
 
     @FXML
@@ -68,7 +73,7 @@ public class Controller {
     }
 
     @FXML
-    public void setMapStartingMap() {
+    public void StartingMap() {
         ImageView img = new ImageView();
         Image image = new Image("file:///C:/Users/idan2/Desktop/MguideProf.png");
         img.setImage(image);

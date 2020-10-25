@@ -16,7 +16,7 @@ public class Main extends Application {
         primaryStage.setTitle("Michelin Guide");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-        myController.setMapStartingMap();
+        myController.StartingMap();
 
     }
     public static void main(String[] args) {
