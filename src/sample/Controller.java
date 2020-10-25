@@ -85,6 +85,13 @@ public class Controller {
     private void setData(ActionEvent event) {
         event.consume();
         System.out.println(Countries.getText());
+
+
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+        webEngine.load("file:///C:/Users/idan2/Desktop/html_Info/info.html");
+        webEngine.setJavaScriptEnabled(true);
+        MapPlacer.setCenter(browser);
     }
 
 }

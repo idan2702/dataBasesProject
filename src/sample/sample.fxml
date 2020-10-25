@@ -9,13 +9,50 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="484.0" prefWidth="927.0" style="-fx-background-color: #ED2939;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
+      <Pane id="MapPlacer" layoutX="256.0" layoutY="5.0">
+         <children>
+            <Button layoutX="14.0" layoutY="437.0" mnemonicParsing="false" onAction="#setData" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css">
+               <graphic>
+                  <ImageView fitHeight="29.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/InfoIcon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button layoutX="227.0" layoutY="437.0" mnemonicParsing="false" onAction="#setMap" prefHeight="37.0" prefWidth="220.0" styleClass="button5" stylesheets="@../css/fullpackstyling.css">
+               <graphic>
+                  <ImageView fitHeight="29.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/mapIcon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button layoutX="459.0" layoutY="437.0" mnemonicParsing="false" onAction="#setLink" prefHeight="37.0" prefWidth="200.0" styleClass="button6" stylesheets="@../css/fullpackstyling.css" />
+            <ImageView fitHeight="29.0" fitWidth="78.0" layoutX="536.0" layoutY="441.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/LinkIcon.png" />
+               </image>
+            </ImageView>
+            <BorderPane id="MapPlacer" fx:id="MapPlacer" layoutX="14.0" layoutY="14.0" prefHeight="413.0" prefWidth="649.0">
+               <center>
+                  <BorderPane prefHeight="413.0" prefWidth="649.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <BorderPane layoutX="466.0" layoutY="284.0" prefHeight="151.0" prefWidth="185.0" />
+         </children>
+      </Pane>
       <AnchorPane prefHeight="484.0" prefWidth="204.0" style="-fx-background-color: #C40233;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Pane layoutX="1.0" layoutY="106.0" prefHeight="72.0" prefWidth="255.0" style="-fx-background-color: #f55f78; -fx-background-radius: 5;">
@@ -75,35 +112,13 @@
             <Insets />
          </opaqueInsets>
       </AnchorPane>
-      <Pane id="MapPlacer" layoutX="256.0" prefHeight="484.0" prefWidth="673.0">
-         <children>
-            <Button layoutX="14.0" layoutY="437.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css">
-               <graphic>
-                  <ImageView fitHeight="29.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/InfoIcon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button layoutX="227.0" layoutY="437.0" mnemonicParsing="false" onAction="#setMap" prefHeight="37.0" prefWidth="220.0" styleClass="button5" stylesheets="@../css/fullpackstyling.css">
-               <graphic>
-                  <ImageView fitHeight="29.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/mapIcon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button layoutX="459.0" layoutY="437.0" mnemonicParsing="false" onAction="#setLink" prefHeight="37.0" prefWidth="200.0" styleClass="button6" stylesheets="@../css/fullpackstyling.css" />
-            <ImageView fitHeight="29.0" fitWidth="78.0" layoutX="536.0" layoutY="441.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../Images/LinkIcon.png" />
-               </image>
-            </ImageView>
-            <BorderPane id="MapPlacer" fx:id="MapPlacer" layoutX="14.0" layoutY="14.0" prefHeight="413.0" prefWidth="649.0" />
-            <BorderPane layoutX="20.0" layoutY="284.0" prefHeight="151.0" prefWidth="185.0" />
-            <BorderPane layoutX="466.0" layoutY="284.0" prefHeight="151.0" prefWidth="185.0" />
-         </children></Pane>
+      <GridPane alignment="CENTER" layoutX="254.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+         </rowConstraints>
+      </GridPane>
    </children>
 </AnchorPane>
