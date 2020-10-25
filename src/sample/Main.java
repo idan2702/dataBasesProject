@@ -6,17 +6,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
 
+public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
+        Parent root = loader.load();
+        Controller myController = loader.getController();
         primaryStage.setTitle("Michelin Guide");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+        myController.setMapStartingMap();
+
     }
-
-
     public static void main(String[] args) {
         launch(args);
     }
