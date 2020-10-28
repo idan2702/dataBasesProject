@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -14,8 +16,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="1215.0" style="-fx-background-color: #9fa0b3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
       <AnchorPane layoutY="-14.0" prefHeight="722.0" prefWidth="257.0" style="-fx-background-color: #7b7c8f;" AnchorPane.bottomAnchor="-3.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="-14.0">
@@ -97,14 +97,14 @@
                         <Insets left="10.0" top="5.0" />
                      </VBox.margin>
                   </Text>
-                  <ChoiceBox value="null" onAction="#priceSelectionModified" id="priceChoice" prefHeight="26.0" prefWidth="234.0" >
+                  <ChoiceBox id="priceChoice" onAction="#priceSelectionModified" prefHeight="26.0" prefWidth="234.0" value="2 minutes">
                      <items>
                         <FXCollections fx:factory="observableArrayList">
                            <String fx:value="$ - Cheap" />
                            <String fx:value="$$ - Not Expensive" />
                            <String fx:value="$$$ - Expensive" />
                            <String fx:value="$$$$ - Very Expensive" />
-                           <String fx:value="$$$$$ - Extremely Expensive" />
+                           <String fx:value="$$$$$- Extremely Expensive" />
                         </FXCollections>
                      </items>
                      <VBox.margin>
