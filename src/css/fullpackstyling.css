@@ -1,98 +1,36 @@
 .button1
 {
--fx-background-color :  #b80f1d;
+-fx-background-color :  #656680;
 -fx-background-radius :  30 0 0 30;
 }
 .button1:hover
 {
--fx-background-color : #db303e ;
+-fx-background-color : #535469 ;
 -fx-background-radius :  30 0 0 30;
 }
 .button1:pressed
 {
--fx-background-color : #b3222e ;
+-fx-background-color : #424354 ;
 -fx-background-radius :  30 0 0 30;
 }
 
-.button2
-{
--fx-background-color :  #b80f1d;
--fx-background-radius :  30 0 0 30;
-}
-.button2:hover
-{
--fx-background-color : #db303e ;
--fx-background-radius :  30 0 0 30;
-}
-.button2:pressed
-{
--fx-background-color : #b3222e ;
--fx-background-radius :  30 0 0 30;
-}
-
-.button3
-{
--fx-background-color :  #b80f1d;
--fx-background-radius :  30 0 0 30;
-}
-.button3:hover
-{
--fx-background-color : #db303e ;
--fx-background-radius :  30 0 0 30;
-}
-.button3:pressed
-{
--fx-background-color : #b3222e ;
--fx-background-radius :  30 0 0 30;
-}
 
 .button4
 {
--fx-background-color :  #b80f1d;
+-fx-background-color :  #656680;
 -fx-background-radius :  10 10 10 10;
 }
 .button4:hover
 {
--fx-background-color : #db303e ;
+-fx-background-color : #535469 ;
 -fx-background-radius :  10 10 10 10;
 }
 .button4:pressed
 {
--fx-background-color : #b3222e ;
+-fx-background-color : #424354 ;
 -fx-background-radius :  10 10 10 10;
 }
 
-.button5
-{
--fx-background-color :  #b80f1d;
--fx-background-radius :  10 10 10 10;
-}
-.button5:hover
-{
--fx-background-color : #db303e ;
--fx-background-radius :  10 10 10 10;
-}
-.button5:pressed
-{
--fx-background-color : #b3222e ;
--fx-background-radius :  10 10 10 10;
-}
-
-.button6
-{
--fx-background-color :  #b80f1d;
--fx-background-radius :  10 10 10 10;
-}
-.button6:hover
-{
--fx-background-color : #db303e ;
--fx-background-radius :  10 10 10 10;
-}
-.button6:pressed
-{
--fx-background-color : #b3222e ;
--fx-background-radius :  10 10 10 10;
-}
 
 .combo-box
 {

@@ -13,6 +13,7 @@ public class Main extends Application {
         Parent root = loader.load();
         Controller myController = loader.getController();
         primaryStage.setTitle("Michelin Guide");
+        primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         myController.StartingMap();

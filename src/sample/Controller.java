@@ -1,7 +1,10 @@
 package sample;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,11 +12,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
-import static com.sun.javafx.scene.control.skin.Utils.getResource;
 
 
 public class Controller {
@@ -23,6 +21,33 @@ public class Controller {
     private TextField Countries;
     public int michelinStars = -1;
     private String rest = "";
+
+    @FXML
+    public void priceSelectionModified(ActionEvent event) {
+        event.consume();
+        ChoiceBox<String> priceChoice = (ChoiceBox<String>) event.getSource();
+        System.out.println(priceChoice.getValue());
+    }
+
+    @FXML
+    private void setEveryDayRest(ActionEvent event) {
+        event.consume();
+        System.out.println("standart rest choosed");
+
+    }
+
+    @FXML
+    private void addRest(ActionEvent event) {
+        event.consume();
+        System.out.println("add rest choosed");
+
+    }
+    @FXML
+    private void getNearRest(ActionEvent event) {
+        event.consume();
+        System.out.println("near rest choosed");
+
+    }
 
     @FXML
     private void setMichelintoOne(ActionEvent event) {
@@ -74,10 +99,11 @@ public class Controller {
 
     @FXML
     public void StartingMap() {
-        ImageView img = new ImageView();
-        Image image = new Image("file:///C:/Users/idan2/Desktop/MguideProf.png");
-        img.setImage(image);
-        MapPlacer.setCenter(img);
+//        ImageView img = new ImageView();
+//        Image image = new Image("file:///C:/Users/idan2/Desktop/restaurantBack.jpg");
+//        img.setImage(image);
+//        MapPlacer.setCenter(img);
+
 
     }
 
