@@ -16,7 +16,7 @@ public class Main extends Application {
         primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-        myController.StartingMap();
+        myController.StartingMap(primaryStage);
 
     }
     public static void main(String[] args) {

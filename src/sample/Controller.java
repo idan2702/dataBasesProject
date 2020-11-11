@@ -1,17 +1,18 @@
 package sample;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 
 public class Controller {
@@ -20,6 +21,7 @@ public class Controller {
     @FXML
     private TextField Countries;
     public int michelinStars = -1;
+    private Stage primaryStage;
     private String rest = "";
 
     @FXML
@@ -43,10 +45,17 @@ public class Controller {
 
     }
     @FXML
-    private void getNearRest(ActionEvent event) {
+    private void getNearRest(ActionEvent event)throws Exception {
         event.consume();
         System.out.println("near rest choosed");
-
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("NearestRests.fxml"));
+        Parent root1 = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initOwner(this.primaryStage);
+        stage.setMaximized(true);
+        stage.setTitle("near by...");
+        stage.setScene(new Scene(root1));
+        stage.show();
     }
 
     @FXML
@@ -89,20 +98,21 @@ public class Controller {
         event.consume();
         System.out.println(Countries.getText());
 
-
         final WebView browser = new WebView();
         final WebEngine webEngine = browser.getEngine();
-        webEngine.load("file:///C:/Users/idan2/Desktop/leaflet.html");
+        webEngine.load(getClass().getResource("/sample/leaflet.html").toExternalForm());
         webEngine.setJavaScriptEnabled(true);
         MapPlacer.setCenter(browser);
     }
 
     @FXML
-    public void StartingMap() {
-//        ImageView img = new ImageView();
-//        Image image = new Image("file:///C:/Users/idan2/Desktop/restaurantBack.jpg");
-//        img.setImage(image);
-//        MapPlacer.setCenter(img);
+    public void StartingMap(Stage _primaryStage) {
+        this.primaryStage = _primaryStage;
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+        webEngine.load(getClass().getResource("/sample/leaflet.html").toExternalForm());
+        webEngine.setJavaScriptEnabled(true);
+        MapPlacer.setCenter(browser);
 
 
     }
@@ -115,7 +125,7 @@ public class Controller {
 
         final WebView browser = new WebView();
         final WebEngine webEngine = browser.getEngine();
-        webEngine.load("file:///C:/Users/idan2/Desktop/html_Info/info.html");
+        webEngine.load(getClass().getResource("/sample/info.html").toExternalForm());
         webEngine.setJavaScriptEnabled(true);
         MapPlacer.setCenter(browser);
     }
