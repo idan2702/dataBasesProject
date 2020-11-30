@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #9fa0b3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Login">
+    <children>
+        <Pane prefHeight="93.0" prefWidth="600.0">
+            <children>
+                <Text layoutX="267.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" wrappingWidth="65.76171875">
+                    <font>
+                        <Font name="Arial" size="24.0" />
+                    </font>
+                </Text>
+            </children>
+        </Pane>
+        <Text layoutX="123.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="username:">
+            <font>
+                <Font name="System Bold Italic" size="14.0" />
+            </font>
+        </Text>
+        <TextField id="log_id" layoutX="218.0" layoutY="105.0" prefHeight="25.0" prefWidth="253.0" />
+        <TextField id="log_pass" layoutX="218.0" layoutY="160.0" prefHeight="25.0" prefWidth="253.0" />
+        <Text layoutX="123.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="password:">
+            <font>
+                <Font name="System Bold Italic" size="14.0" />
+            </font>
+        </Text>
+        <Button id="login" fx:id="login"  onAction="#Login"  layoutX="124.0" layoutY="243.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="164.0" text="login" />
+      <Button id="move_to_reg" fx:id="move_to_reg" onAction="#move_to_registration" layoutX="307.0" layoutY="243.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="164.0" text="register" />
+    </children>
+</AnchorPane>
