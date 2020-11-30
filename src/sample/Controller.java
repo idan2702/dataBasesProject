@@ -16,6 +16,8 @@ public class Controller {
     public BorderPane MapPlacer;
     @FXML
     private TextField Countries;
+    @FXML
+    private TextField City;
     public int michelinStars = -1;
     private Stage primaryStage;
     private String rest = "";
@@ -46,7 +48,7 @@ public class Controller {
 
     }
     @FXML
-    private void getNearRest(ActionEvent event)throws Exception {
+    private void getNearRest(ActionEvent event){
         event.consume();
         System.out.println("near rest choosed");
 

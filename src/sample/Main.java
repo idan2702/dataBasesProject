@@ -9,15 +9,15 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
         Parent root = loader.load();
-        Controller myController = loader.getController();
-        primaryStage.setTitle("Restaurants Guide");
+        Login myController = loader.getController();
+        primaryStage.setTitle("Login");
         primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-        myController.StartingMap(primaryStage);
-
+        myController.set_stage(primaryStage);
     }
     public static void main(String[] args) {
         launch(args);
