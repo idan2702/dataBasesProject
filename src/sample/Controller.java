@@ -10,7 +10,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 
-
 public class Controller {
     @FXML
     public BorderPane MapPlacer;
@@ -21,6 +20,17 @@ public class Controller {
     public int michelinStars = -1;
     private Stage primaryStage;
     private String rest = "";
+
+
+    @FXML
+    public void getExtraInformationbtn(ActionEvent event) {
+        event.consume();
+        Stage stage = new Stage();
+        stage.initOwner(this.primaryStage);
+
+        GetExtraInformation getExtraInformation = new GetExtraInformation();
+        getExtraInformation.start(stage);
+    }
 
     @FXML
     public void priceSelectionModified(ActionEvent event) {
@@ -47,8 +57,9 @@ public class Controller {
         addData.start(stage);
 
     }
+
     @FXML
-    private void getNearRest(ActionEvent event){
+    private void getNearRest(ActionEvent event) {
         event.consume();
         System.out.println("near rest choosed");
 

@@ -4,16 +4,16 @@ import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class ShowInformation extends Application {
 
@@ -48,7 +48,7 @@ public class ShowInformation extends Application {
     public void start(Stage stage) {
         Scene scene = new Scene(new Group());
         stage.setTitle("Restaurants info");
-        stage.setWidth(935);
+        stage.setWidth(1080);
         stage.setHeight(500);
 
         final Label label = new Label("Restaurants Info");
@@ -89,9 +89,11 @@ public class ShowInformation extends Application {
         CuisineCol.setCellValueFactory(
                 new PropertyValueFactory<RestaurantInfo, String>("Cuisine"));
 
+
         table.setItems(data);
         table.getColumns().addAll(PriceCol, ZipCodeCol, RegionCol, CityCol, NameCol,CuisineCol);
 
+        addButtonToTable();
         final VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -102,9 +104,62 @@ public class ShowInformation extends Application {
         stage.setScene(scene);
         stage.show();
     }
+    private void addButtonToTable() {
+        TableColumn<RestaurantInfo, Void> colBtn = new TableColumn("Like/Unlike");
+
+        Callback<TableColumn<RestaurantInfo, Void>, TableCell<RestaurantInfo, Void>> cellFactory = new Callback<TableColumn<RestaurantInfo, Void>, TableCell<RestaurantInfo, Void>>() {
+            @Override
+            public TableCell<RestaurantInfo, Void> call(final TableColumn<RestaurantInfo, Void> param) {
+                final TableCell<RestaurantInfo, Void> cell = new TableCell<RestaurantInfo, Void>() {
+
+                    private final Button btn = new Button("Like");
+
+                    {
+                        btn.setOnAction((ActionEvent event) -> {
+                            RestaurantInfo rest = getTableView().getItems().get(getIndex());
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Hey!");
+                            alert.setHeaderText(null);
+                            if(rest.get_is_clicked()) {
+                                alert.setContentText("You liked \"" + rest.getName() + "\"");
+                                rest.set_is_clicked();
+                                btn.setText("Unlike");
+                                btn.minWidth(100);
+                                //todo:add to database
+                            }else{
+                                alert.setContentText("You unliked \"" + rest.getName() + "\"");
+                                rest.set_is_clicked();
+                                btn.setText("Like");
+                                btn.minWidth(100);
+                                //todo:remove fome database
+                            }
+                            alert.showAndWait();
+                        });
+                        btn.minWidth(100);
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        colBtn.setCellFactory(cellFactory);
+
+        table.getColumns().add(colBtn);
+
+    }
 
     public static class RestaurantInfo {
-
+        private boolean is_not_clicked = true;
         private final SimpleStringProperty price;
         private final SimpleStringProperty zipCode;
         private final SimpleStringProperty region;
@@ -121,6 +176,19 @@ public class ShowInformation extends Application {
             this.name = new SimpleStringProperty(name);
             this.cuisine = new SimpleStringProperty(cuisine);
 
+
+        }
+
+        public boolean get_is_clicked() {
+            return this.is_not_clicked;
+        }
+
+        public void set_is_clicked() {
+            if(is_not_clicked){
+                is_not_clicked = false;
+            }else{
+                is_not_clicked = true;
+            }
 
         }
 
@@ -175,4 +243,6 @@ public class ShowInformation extends Application {
             this.name.set(name);
         }
     }
+
+
 }

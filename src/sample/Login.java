@@ -38,7 +38,7 @@ public class Login {
         Parent root = loader.load();
         Register myController = loader.getController();
         primaryStage.setTitle("Register");
-        primaryStage.setMaximized(true);
+        primaryStage.setMaximized(false);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         myController.set_stage(primaryStage);

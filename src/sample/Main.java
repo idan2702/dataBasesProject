@@ -9,12 +9,11 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
         Parent root = loader.load();
         Login myController = loader.getController();
         primaryStage.setTitle("Login");
-        primaryStage.setMaximized(true);
+        primaryStage.setMaximized(false);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         myController.set_stage(primaryStage);

@@ -33,8 +33,6 @@ public class Register {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         myController.StartingMap(primaryStage);
-
-
     }
     private void save_user_in_database(String id,String pass) {
         System.out.println("user added");
