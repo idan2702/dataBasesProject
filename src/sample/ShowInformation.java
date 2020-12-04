@@ -18,39 +18,25 @@ import javafx.util.Callback;
 public class ShowInformation extends Application {
 
     private TableView<RestaurantInfo> table = new TableView<RestaurantInfo>();
-    private final ObservableList<RestaurantInfo> data =
-            FXCollections.observableArrayList(
-                    new RestaurantInfo("$$$","1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$",  "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$",  "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$",  "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$",  "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$",  "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$",  "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$",  "1401 K", "Austria", "Salzburg", "Esszimmer",  "French"),
-                    new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer",  "French")
-            );
-
+    private  ObservableList<RestaurantInfo> data =
+            FXCollections.observableArrayList();
     public static void main(String[] args) {
         launch(args);
     }
+    public void setdataArrayFromDb(){
+        //todo : get from db
+        data =  FXCollections.observableArrayList(
+                new RestaurantInfo("$$$","1401 K", "Austria", "Salzburg", "Esszimmer",  "French")
+        );
 
+    }
     @Override
     public void start(Stage stage) {
         Scene scene = new Scene(new Group());
         stage.setTitle("Restaurants info");
         stage.setWidth(1080);
         stage.setHeight(500);
-
+        setdataArrayFromDb();
         final Label label = new Label("Restaurants Info");
         label.setFont(new Font("Arial", 20));
 

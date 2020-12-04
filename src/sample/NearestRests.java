@@ -61,64 +61,27 @@ public class NearestRests extends Application {
         RegionCol.setCellValueFactory(
                 new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("region"));
         RegionCol.setCellFactory(cellFactory);
-        RegionCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<ShowInformation.RestaurantInfo, String>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<ShowInformation.RestaurantInfo, String> t) {
-                        ((ShowInformation.RestaurantInfo) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setRegion(t.getNewValue());
-                    }
-                }
-        );
 
         TableColumn CityCol = new TableColumn("City");
         CityCol.setMinWidth(200);
         CityCol.setCellValueFactory(
                 new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("city"));
         CityCol.setCellFactory(cellFactory);
-        CityCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<ShowInformation.RestaurantInfo, String>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<ShowInformation.RestaurantInfo, String> t) {
-                        ((ShowInformation.RestaurantInfo) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setCity(t.getNewValue());
-                    }
-                }
-        );
+
 
         TableColumn NameCol = new TableColumn("Name");
         NameCol.setMinWidth(200);
         NameCol.setCellValueFactory(
                 new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("name"));
         NameCol.setCellFactory(cellFactory);
-        NameCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<ShowInformation.RestaurantInfo, String>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<ShowInformation.RestaurantInfo, String> t) {
-                        ((ShowInformation.RestaurantInfo) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setName(t.getNewValue());
-                    }
-                }
-        );
+
 
         TableColumn CuisineCol = new TableColumn("Cuisine");
         CuisineCol.setMinWidth(100);
         CuisineCol.setCellValueFactory(
                 new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("Cuisine"));
         CuisineCol.setCellFactory(cellFactory);
-        CuisineCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<ShowInformation.RestaurantInfo, String>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<ShowInformation.RestaurantInfo, String> t) {
-                        ((ShowInformation.RestaurantInfo) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setCuisine(t.getNewValue());
-                    }
-                }
-        );
+
         table.setItems(data);
         table.getColumns().addAll(RegionCol, CityCol, NameCol, CuisineCol);
 

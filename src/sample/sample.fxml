@@ -76,19 +76,6 @@
                         <Insets left="10.0" />
                      </padding>
                   </Button>
-                  <Text fill="#c99e9e" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Restaurant:" wrappingWidth="204.73928833007812">
-                     <font>
-                        <Font name="System Bold" size="19.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="10.0" top="10.0" />
-                     </VBox.margin>
-                  </Text>
-                  <ChoiceBox prefHeight="26.0" prefWidth="234.0">
-                     <VBox.margin>
-                        <Insets left="10.0" top="10.0" />
-                     </VBox.margin>
-                  </ChoiceBox>
                   <Text fill="#c99e9e" strokeType="OUTSIDE" strokeWidth="0.0" text="price range:">
                      <font>
                         <Font name="System Bold" size="19.0" />
@@ -110,6 +97,19 @@
                      <VBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </VBox.margin>
+                  </ChoiceBox >
+                  <Text fill="#c99e9e" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Restaurant:" wrappingWidth="204.73928833007812">
+                     <font>
+                        <Font name="System Bold" size="19.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Text>
+                  <ChoiceBox  id="restSelection" fx:id="restSelection"  prefHeight="26.0" prefWidth="234.0" onAction="#restSelectionModified">
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
                   </ChoiceBox>
                </children>
             </VBox>
@@ -125,7 +125,7 @@
                </font>
             </Text>
             <TextField id="City" fx:id="City" layoutX="19.0" layoutY="143.0" prefHeight="29.0" prefWidth="220.0" />
-            <Button layoutX="29.0" layoutY="579.0" mnemonicParsing="false" onAction="#addRest" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css">
+            <Button layoutX="29.0" layoutY="579.0" mnemonicParsing="false" onAction="#addRest" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="my favourites" textFill="#c99e9e">
                <graphic>
                   <ImageView fitHeight="29.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
                      <image>

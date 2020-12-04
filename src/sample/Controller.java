@@ -2,6 +2,7 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -11,6 +12,7 @@ import javafx.stage.Stage;
 
 
 public class Controller {
+    private boolean rest_choosed = false;
     @FXML
     public BorderPane MapPlacer;
     @FXML
@@ -38,6 +40,14 @@ public class Controller {
         ChoiceBox<String> priceChoice = (ChoiceBox<String>) event.getSource();
         System.out.println(priceChoice.getValue());
     }
+
+    @FXML
+    public void restSelectionModified(ActionEvent event) {
+        event.consume();
+        rest_choosed = true;
+        // todo: add query
+    }
+
 
     @FXML
     private void setEveryDayRest(ActionEvent event) {
@@ -97,24 +107,41 @@ public class Controller {
     @FXML
     private void setLink(ActionEvent event) {
         event.consume();
-        System.out.println(Countries.getText());
-        final WebView browser = new WebView();
-        final WebEngine webEngine = browser.getEngine();
-        webEngine.load("https://www.oetkercollection.com/fr/hotels/le-bristol-paris/restaurants-et-bar/restaurants/epicure/");
-        webEngine.setJavaScriptEnabled(true);
-        MapPlacer.setCenter(browser);
+        if (this.rest_choosed) {
+            System.out.println(Countries.getText());
+            final WebView browser = new WebView();
+            final WebEngine webEngine = browser.getEngine();
+            webEngine.load("https://www.oetkercollection.com/fr/hotels/le-bristol-paris/restaurants-et-bar/restaurants/epicure/");
+            webEngine.setJavaScriptEnabled(true);
+            MapPlacer.setCenter(browser);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Hey!");
+            alert.setHeaderText(null);
+            alert.setContentText("You didn't chose restaurant");
+            alert.showAndWait();
+        }
+
     }
 
     @FXML
     public void setMap(ActionEvent event) {
         event.consume();
-        System.out.println(Countries.getText());
+        if (this.rest_choosed) {
+            System.out.println(Countries.getText());
+            final WebView browser = new WebView();
+            final WebEngine webEngine = browser.getEngine();
+            webEngine.load(getClass().getResource("/sample/leaflet.html").toExternalForm());
+            webEngine.setJavaScriptEnabled(true);
+            MapPlacer.setCenter(browser);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Hey!");
+            alert.setHeaderText(null);
+            alert.setContentText("You didn't chose restaurant");
+            alert.showAndWait();
+        }
 
-        final WebView browser = new WebView();
-        final WebEngine webEngine = browser.getEngine();
-        webEngine.load(getClass().getResource("/sample/leaflet.html").toExternalForm());
-        webEngine.setJavaScriptEnabled(true);
-        MapPlacer.setCenter(browser);
     }
 
     @FXML
@@ -132,11 +159,18 @@ public class Controller {
     @FXML
     private void setData(ActionEvent event) {
         event.consume();
-        Stage stage = new Stage();
-        stage.initOwner(this.primaryStage);
-
-        ShowInformation addData = new ShowInformation();
-        addData.start(stage);
+        if (this.rest_choosed) {
+            Stage stage = new Stage();
+            stage.initOwner(this.primaryStage);
+            ShowInformation addData = new ShowInformation();
+            addData.start(stage);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Hey!");
+            alert.setHeaderText(null);
+            alert.setContentText("You didn't chose restaurant");
+            alert.showAndWait();
+        }
     }
 
 }
