@@ -15,21 +15,27 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-public class ShowInformation extends Application {
+import java.util.ArrayList;
 
+public class ShowInformation extends Application {
     private TableView<RestaurantInfo> table = new TableView<RestaurantInfo>();
-    private  ObservableList<RestaurantInfo> data =
+    private ObservableList<RestaurantInfo> data =
             FXCollections.observableArrayList();
+    public ShowInformation() {
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
-    public void setdataArrayFromDb(){
+
+    public void setdataArrayFromDb() {
         //todo : get from db
-        data =  FXCollections.observableArrayList(
-                new RestaurantInfo("$$$","1401 K", "Austria", "Salzburg", "Esszimmer",  "French")
+        data = FXCollections.observableArrayList(
+                new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer", "French")
         );
 
     }
+
     @Override
     public void start(Stage stage) {
         Scene scene = new Scene(new Group());
@@ -46,7 +52,6 @@ public class ShowInformation extends Application {
         PriceCol.setMinWidth(100);
         PriceCol.setCellValueFactory(
                 new PropertyValueFactory<RestaurantInfo, String>("price"));
-
 
 
         TableColumn ZipCodeCol = new TableColumn("ZipCode");
@@ -77,7 +82,7 @@ public class ShowInformation extends Application {
 
 
         table.setItems(data);
-        table.getColumns().addAll(PriceCol, ZipCodeCol, RegionCol, CityCol, NameCol,CuisineCol);
+        table.getColumns().addAll(PriceCol, ZipCodeCol, RegionCol, CityCol, NameCol, CuisineCol);
 
         addButtonToTable();
         final VBox vbox = new VBox();
@@ -90,6 +95,7 @@ public class ShowInformation extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
     private void addButtonToTable() {
         TableColumn<RestaurantInfo, Void> colBtn = new TableColumn("Like/Unlike");
 
@@ -106,13 +112,13 @@ public class ShowInformation extends Application {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Hey!");
                             alert.setHeaderText(null);
-                            if(rest.get_is_clicked()) {
+                            if (rest.get_is_clicked()) {
                                 alert.setContentText("You liked \"" + rest.getName() + "\"");
                                 rest.set_is_clicked();
                                 btn.setText("Unlike");
                                 btn.minWidth(100);
                                 //todo:add to database
-                            }else{
+                            } else {
                                 alert.setContentText("You unliked \"" + rest.getName() + "\"");
                                 rest.set_is_clicked();
                                 btn.setText("Like");
@@ -153,7 +159,7 @@ public class ShowInformation extends Application {
         private final SimpleStringProperty name;
         final SimpleStringProperty cuisine;
 
-        public RestaurantInfo(String price, String zipCode, String region, String city, String name , String cuisine) {
+        public RestaurantInfo(String price, String zipCode, String region, String city, String name, String cuisine) {
 
             this.price = new SimpleStringProperty(price);
             this.zipCode = new SimpleStringProperty(zipCode);
@@ -170,9 +176,9 @@ public class ShowInformation extends Application {
         }
 
         public void set_is_clicked() {
-            if(is_not_clicked){
+            if (is_not_clicked) {
                 is_not_clicked = false;
-            }else{
+            } else {
                 is_not_clicked = true;
             }
 
@@ -185,7 +191,6 @@ public class ShowInformation extends Application {
         public void setprice(String price) {
             this.price.set(price);
         }
-
 
 
         public String getZipCode() {

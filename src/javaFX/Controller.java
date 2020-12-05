@@ -1,5 +1,7 @@
 package javaFX;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -10,9 +12,14 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 
 public class Controller {
+    private DbConnection dbConnection = new DbConnection();
     private boolean rest_choosed = false;
+    @FXML
+    private ChoiceBox restSelection;
     @FXML
     public BorderPane MapPlacer;
     @FXML
@@ -20,8 +27,8 @@ public class Controller {
     @FXML
     private TextField City;
     public int michelinStars = -1;
+    private int price = 0;
     private Stage primaryStage;
-    private String rest = "";
 
 
     @FXML
@@ -35,10 +42,89 @@ public class Controller {
     }
 
     @FXML
+    public void setRestSelection(ActionEvent event) {
+        event.consume();
+        ObservableList<String> list = FXCollections.observableArrayList();
+        ArrayList<String> data = SetRestSelection(this.City.getText(), this.Countries.getText(),
+                this.michelinStars, this.price);
+        for(int i = 0; i < data.size();i++){
+            list.add(data.get(i));
+        }
+        restSelection.setItems(list);
+    }
+
+    @FXML
     public void priceSelectionModified(ActionEvent event) {
         event.consume();
         ChoiceBox<String> priceChoice = (ChoiceBox<String>) event.getSource();
+        switch (priceChoice.getValue()) {
+            case "$ - Cheap":
+                price = 1;
+                break;
+            case "$$ - Not Expensive":
+                price = 2;
+                break;
+            case "$$$ - Expensive":
+                price = 3;
+                break;
+            case "$$$$ - Very Expensive":
+                price = 4;
+                break;
+            case "$$$$$- Extremely Expensive":
+                price = 5;
+                break;
+            default:
+                price = 1;
+                break;
+        }
         System.out.println(priceChoice.getValue());
+    }
+
+    private ArrayList<String> SetRestSelection(String city, String country, int michelinStars, int cost) {
+        String countrySearch = "";
+        String citySearch = "";
+        String michelinStarsSearch = "";
+        String costSearch = "";
+        String sqlQuery = "SELECT * FROM restaurants_dbs.restaurants JOIN restaurants_dbs.locations USING(Name)";
+        if (michelinStars >= 1) {
+            switch (michelinStars) {
+                case 1:
+                    michelinStarsSearch = "Rate='1star' AND ";
+                    break;
+                case 2:
+                    michelinStarsSearch = "Rate='2star' AND ";
+                    break;
+                case 3:
+                    michelinStarsSearch = "Rate='3star' AND ";
+                    break;
+                default:
+                    michelinStarsSearch = "Rate='1star' AND ";
+                    break;
+            }
+        }
+        if (cost > 0) {
+            costSearch = "Cost =" + cost + " ";
+        }
+        if (country != "") {
+            countrySearch = "Country ='" + country + "' AND ";
+        }
+        if (city != "") {
+            countrySearch = "City ='" + city + "' AND ";
+        }
+        if (countrySearch != "" || citySearch != "" || michelinStarsSearch != "" || costSearch != "") {
+            sqlQuery = sqlQuery + " WHERE " + countrySearch + citySearch + michelinStarsSearch + costSearch + ";";
+        }
+        try {
+            return dbConnection.AskDataBaseQuery(sqlQuery);
+
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("error!");
+            alert.setHeaderText(null);
+            alert.setContentText("failed: error occurred, please try again...");
+            alert.showAndWait();
+        }
+        return null;
     }
 
     @FXML
