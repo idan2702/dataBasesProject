@@ -1,4 +1,4 @@
-package sample;
+package javaFX;
 
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,8 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
-import java.util.ArrayList;
 
 public class AddData extends Application {
     private TableView<MyFavouritesRestaurantInfo> table = new TableView<MyFavouritesRestaurantInfo>();

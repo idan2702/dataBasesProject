@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #9fa0b3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Login">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #9fa0b3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFX.Login">
     <children>
         <Pane prefHeight="93.0" prefWidth="600.0">
             <children>
@@ -23,8 +23,8 @@
                 <Font name="System Bold Italic" size="14.0" />
             </font>
         </Text>
-        <TextField id="log_id" layoutX="218.0" layoutY="105.0" prefHeight="25.0" prefWidth="253.0" />
-        <TextField id="log_pass" layoutX="218.0" layoutY="160.0" prefHeight="25.0" prefWidth="253.0" />
+        <TextField id="log_id" fx:id="log_id" layoutX="218.0" layoutY="105.0" prefHeight="25.0" prefWidth="253.0" />
+        <TextField id="log_pass" fx:id="log_pass" layoutX="218.0" layoutY="160.0" prefHeight="25.0" prefWidth="253.0" />
         <Text layoutX="123.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="password:">
             <font>
                 <Font name="System Bold Italic" size="14.0" />

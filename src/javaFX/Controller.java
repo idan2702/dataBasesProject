@@ -1,4 +1,4 @@
-package sample;
+package javaFX;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -131,7 +131,7 @@ public class Controller {
             System.out.println(Countries.getText());
             final WebView browser = new WebView();
             final WebEngine webEngine = browser.getEngine();
-            webEngine.load(getClass().getResource("/sample/leaflet.html").toExternalForm());
+            webEngine.load(getClass().getResource("/javaFX/leaflet.html").toExternalForm());
             webEngine.setJavaScriptEnabled(true);
             MapPlacer.setCenter(browser);
         } else {
@@ -149,7 +149,7 @@ public class Controller {
         this.primaryStage = _primaryStage;
         final WebView browser = new WebView();
         final WebEngine webEngine = browser.getEngine();
-        webEngine.load(getClass().getResource("/sample/leaflet.html").toExternalForm());
+        webEngine.load(getClass().getResource("/javaFX/leaflet.html").toExternalForm());
         webEngine.setJavaScriptEnabled(true);
         MapPlacer.setCenter(browser);
 
