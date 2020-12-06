@@ -49,18 +49,6 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#setMichelintoThree" prefHeight="44.0" prefWidth="256.0" styleClass="button1" stylesheets="@../css/fullpackstyling.css" text="Three michelin star" textFill="#c99e9e">
-                     <graphic>
-                        <ImageView fitHeight="33.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@Images/3.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Button>
                   <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#setMichelintoTwo" prefHeight="44.0" prefWidth="256.0" styleClass="button1" stylesheets="@../css/fullpackstyling.css" text="Two michelin star" textFill="#c99e9e">
                      <graphic>
                         <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
@@ -75,6 +63,18 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding>
+                  </Button>
+                  <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#setMichelintoThree" prefHeight="44.0" prefWidth="256.0" styleClass="button1" stylesheets="@../css/fullpackstyling.css" text="Three michelin star" textFill="#c99e9e">
+                     <graphic>
+                        <ImageView fitHeight="33.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Images/3.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </Button>
                   <Text fill="#c99e9e" strokeType="OUTSIDE" strokeWidth="0.0" text="price range:">
                      <font>
@@ -130,11 +130,12 @@
                </graphic>
             </Button>
             <Button id="Get_Extra_Information_btn" fx:id="Get_Extra_Information_btn" layoutX="29.0" layoutY="625.0" mnemonicParsing="false" onAction="#getExtraInformationbtn" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="Get Extra Information" textFill="#c99e9e" />
-            <ChoiceBox id="restSelection" fx:id="restSelection" layoutX="12.0" layoutY="533.0" onAction="#restSelectionModified" prefHeight="16.0" prefWidth="188.0">
+            <ChoiceBox id="restSelection" fx:id="restSelection" layoutX="12.0" layoutY="543.0" onAction="#restSelectionModified" prefHeight="15.0" prefWidth="188.0">
                <padding>
-                  <Insets left="10.0" top="10.0" />
-               </padding></ChoiceBox>
-            <Button id="setRestSelectionBtn" fx:id="setRestSelectionBtn" layoutX="207.0" layoutY="535.0" mnemonicParsing="false" onAction="#setRestSelection" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="set" textFill="#c99e9e">
+                  <Insets left="10.0" />
+               </padding>
+            </ChoiceBox>
+            <Button id="setRestSelectionBtn" fx:id="setRestSelectionBtn" layoutX="207.0" layoutY="535.0" mnemonicParsing="false" onAction="#setRestSelection" prefHeight="36.0" prefWidth="42.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="set" textFill="#c99e9e">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

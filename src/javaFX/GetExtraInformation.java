@@ -80,7 +80,7 @@ public class GetExtraInformation extends Application {
                 // data.add(restaurantInfo);
                 final ObservableList<ShowInformation.RestaurantInfo> data =
                         FXCollections.observableArrayList(
-                                new ShowInformation.RestaurantInfo("$", "4935067", "Israel", "Tel-Aviv", "test2", "Israel")
+                               // new ShowInformation.RestaurantInfo("$", "4935067", "Israel", "Tel-Aviv", "test2", "Israel")
                         );
                 table.getItems().clear();
                 table.setItems(data);
@@ -95,7 +95,7 @@ public class GetExtraInformation extends Application {
                 // data.add(restaurantInfo);
                 final ObservableList<ShowInformation.RestaurantInfo> data =
                         FXCollections.observableArrayList(
-                                new ShowInformation.RestaurantInfo("$$$$$", "1401 K", "Austria", "Salzburg", "test1", "French")
+                                //new ShowInformation.RestaurantInfo("$$$$$", "1401 K", "Austria", "Salzburg", "test1", "French")
                         );
                 table.getItems().clear();
                 table.setItems(data);

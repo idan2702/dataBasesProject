@@ -19,9 +19,16 @@ import java.util.ArrayList;
 
 public class ShowInformation extends Application {
     private TableView<RestaurantInfo> table = new TableView<RestaurantInfo>();
+    private DataObj db;
+    private String id;
+    private String pass;
     private ObservableList<RestaurantInfo> data =
             FXCollections.observableArrayList();
-    public ShowInformation() {
+
+    public ShowInformation(DataObj db,String id,String pass) {
+        this.db = db;
+        this.id = id;
+        this.pass = pass;
     }
 
     public static void main(String[] args) {
@@ -29,9 +36,29 @@ public class ShowInformation extends Application {
     }
 
     public void setdataArrayFromDb() {
-        //todo : get from db
+        String price;
+        switch (db.getCost()) {
+            case 1:
+                price = "$ - Cheap";
+                break;
+            case 2:
+                price = "$$ - Not Expensive";
+                break;
+            case 3:
+                price = "$$$ - Expensive";
+                break;
+            case 4:
+                price = "$$$$ - Very Expensive";
+                break;
+            case 5:
+                price = "$$$$$- Extremely Expensive";
+                break;
+            default:
+                price = "$ - Cheap";
+                break;
+        }
         data = FXCollections.observableArrayList(
-                new RestaurantInfo("$$$", "1401 K", "Austria", "Salzburg", "Esszimmer", "French")
+                new RestaurantInfo(price, this.db.getCity(), this.db.getName(), this.db.getCouisine())
         );
 
     }
@@ -40,7 +67,7 @@ public class ShowInformation extends Application {
     public void start(Stage stage) {
         Scene scene = new Scene(new Group());
         stage.setTitle("Restaurants info");
-        stage.setWidth(1080);
+        stage.setWidth(850);
         stage.setHeight(500);
         setdataArrayFromDb();
         final Label label = new Label("Restaurants Info");
@@ -49,20 +76,9 @@ public class ShowInformation extends Application {
         table.setEditable(true);
 
         TableColumn PriceCol = new TableColumn("Price");
-        PriceCol.setMinWidth(100);
+        PriceCol.setMinWidth(200);
         PriceCol.setCellValueFactory(
                 new PropertyValueFactory<RestaurantInfo, String>("price"));
-
-
-        TableColumn ZipCodeCol = new TableColumn("ZipCode");
-        ZipCodeCol.setMinWidth(100);
-        ZipCodeCol.setCellValueFactory(
-                new PropertyValueFactory<RestaurantInfo, String>("zipCode"));
-
-        TableColumn RegionCol = new TableColumn("Region");
-        RegionCol.setMinWidth(200);
-        RegionCol.setCellValueFactory(
-                new PropertyValueFactory<RestaurantInfo, String>("region"));
 
 
         TableColumn CityCol = new TableColumn("City");
@@ -82,7 +98,7 @@ public class ShowInformation extends Application {
 
 
         table.setItems(data);
-        table.getColumns().addAll(PriceCol, ZipCodeCol, RegionCol, CityCol, NameCol, CuisineCol);
+        table.getColumns().addAll(PriceCol, CityCol, NameCol, CuisineCol);
 
         addButtonToTable();
         final VBox vbox = new VBox();
@@ -95,7 +111,15 @@ public class ShowInformation extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
+    private boolean checkIfRestaurantLikesBefore(DbConnection connection) throws Exception {
+        String query = "SELECT * FROM restaurants_dbs.likedrest WHERE userName = '"
+                + this.id + "' AND restName = '" + this.db.getName() + "';";
+        ArrayList<String> data = connection.isExist(query);
+        if(data.size()>0){
+            return true;
+        }
+        return false;
+    }
     private void addButtonToTable() {
         TableColumn<RestaurantInfo, Void> colBtn = new TableColumn("Like/Unlike");
 
@@ -105,31 +129,69 @@ public class ShowInformation extends Application {
                 final TableCell<RestaurantInfo, Void> cell = new TableCell<RestaurantInfo, Void>() {
 
                     private final Button btn = new Button("Like");
-
                     {
+                        DbConnection dbConnection = new DbConnection();
                         btn.setOnAction((ActionEvent event) -> {
                             RestaurantInfo rest = getTableView().getItems().get(getIndex());
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Hey!");
                             alert.setHeaderText(null);
-                            if (rest.get_is_clicked()) {
-                                alert.setContentText("You liked \"" + rest.getName() + "\"");
-                                rest.set_is_clicked();
-                                btn.setText("Unlike");
-                                btn.minWidth(100);
-                                //todo:add to database
-                            } else {
-                                alert.setContentText("You unliked \"" + rest.getName() + "\"");
-                                rest.set_is_clicked();
-                                btn.setText("Like");
-                                btn.minWidth(100);
-                                //todo:remove fome database
+                            try {
+                                if (!checkIfRestaurantLikesBefore(dbConnection)) {
+                                    alert.setContentText("You liked \"" + rest.getName() + "\"");
+                                    btn.setText("Unlike");
+                                    btn.minWidth(100);
+                                    String query = "INSERT INTO `restaurants_dbs`.`likedrest` (`userName`, `restName`, `Like`, `Review`) VALUES ('"
+                                            + id + "', '" + db.getName() + "', 'yes', 'empty');";
+
+                                    try{
+                                        if(dbConnection.AddtoDataBase(query)){
+
+                                        }else{
+                                            alert = new Alert(Alert.AlertType.INFORMATION);
+                                            alert.setTitle("error!");
+                                            alert.setHeaderText(null);
+                                            alert.setContentText("failed:error occurred, please try again...");
+                                            alert.showAndWait();
+                                        }
+                                    }catch (Exception e){
+                                        alert = new Alert(Alert.AlertType.INFORMATION);
+                                        alert.setTitle("error!");
+                                        alert.setHeaderText(null);
+                                        alert.setContentText("failed:error occurred, please try again...");
+                                        alert.showAndWait();
+                                    }
+                                } else {
+                                    alert.setContentText("You unliked \"" + rest.getName() + "\"");
+                                    btn.setText("Like");
+                                    btn.minWidth(100);
+                                    String query = "DELETE FROM `restaurants_dbs`.`likedrest` WHERE (`userName` = '"
+                                            + id + "') and (`restName` = '" + db.getName() + "');";
+                                    try{
+                                        if(dbConnection.deleteValInDataBase(query)){
+
+                                        }else{
+                                            alert = new Alert(Alert.AlertType.INFORMATION);
+                                            alert.setTitle("error!");
+                                            alert.setHeaderText(null);
+                                            alert.setContentText("failed:error occurred, please try again...");
+                                            alert.showAndWait();
+                                        }
+                                    }catch (Exception e){
+                                        alert = new Alert(Alert.AlertType.INFORMATION);
+                                        alert.setTitle("error!");
+                                        alert.setHeaderText(null);
+                                        alert.setContentText("failed:error occurred, please try again...");
+                                        alert.showAndWait();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                             alert.showAndWait();
                         });
                         btn.minWidth(100);
                     }
-
                     @Override
                     public void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -143,27 +205,20 @@ public class ShowInformation extends Application {
                 return cell;
             }
         };
-
         colBtn.setCellFactory(cellFactory);
-
         table.getColumns().add(colBtn);
 
     }
 
     public static class RestaurantInfo {
-        private boolean is_not_clicked = true;
         private final SimpleStringProperty price;
-        private final SimpleStringProperty zipCode;
-        private final SimpleStringProperty region;
         private final SimpleStringProperty city;
         private final SimpleStringProperty name;
         final SimpleStringProperty cuisine;
 
-        public RestaurantInfo(String price, String zipCode, String region, String city, String name, String cuisine) {
+        public RestaurantInfo(String price, String city, String name, String cuisine) {
 
             this.price = new SimpleStringProperty(price);
-            this.zipCode = new SimpleStringProperty(zipCode);
-            this.region = new SimpleStringProperty(region);
             this.city = new SimpleStringProperty(city);
             this.name = new SimpleStringProperty(name);
             this.cuisine = new SimpleStringProperty(cuisine);
@@ -171,18 +226,6 @@ public class ShowInformation extends Application {
 
         }
 
-        public boolean get_is_clicked() {
-            return this.is_not_clicked;
-        }
-
-        public void set_is_clicked() {
-            if (is_not_clicked) {
-                is_not_clicked = false;
-            } else {
-                is_not_clicked = true;
-            }
-
-        }
 
         public String getPrice() {
             return price.get();
@@ -193,29 +236,12 @@ public class ShowInformation extends Application {
         }
 
 
-        public String getZipCode() {
-            return zipCode.get();
-        }
-
-        public void setZipCode(String zipCode) {
-            this.zipCode.set(zipCode);
-        }
-
         public String getCuisine() {
             return cuisine.get();
         }
 
         public void setCuisine(String cuisine) {
             this.cuisine.set(cuisine);
-        }
-
-
-        public String getRegion() {
-            return region.get();
-        }
-
-        public void setRegion(String region) {
-            this.region.set(region);
         }
 
         public String getCity() {

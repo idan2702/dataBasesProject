@@ -36,6 +36,7 @@ public class Register  extends NewMember {
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
             myController.StartingMap(primaryStage);
+            myController.setUserInfo(this.reg_id.getText(), this.reg_pass.getText());
             System.out.println("user added");
         } else {
             if(isUserExist == false) {

@@ -1,5 +1,6 @@
 package InterfacesAndAbstracts;
 
+import javaFX.DataObj;
 import javaFX.DbConnection;
 
 import java.util.ArrayList;
@@ -9,9 +10,9 @@ abstract public class NewMember {
         boolean isExist = false;
         try {
             String query = "SELECT * FROM restaurants_dbs.users WHERE Username = '"
-                    + log_id + "' OR Password = '" + log_pass + "';";
+                    + log_id + "' AND Password = '" + log_pass + "';";
             DbConnection dbConnection = new DbConnection();
-            ArrayList<String> ans = dbConnection.AskDataBaseQuery(query);
+            ArrayList<String> ans = dbConnection.isExist(query);
             if(ans.size() > 0){
                 isExist = true;
             }

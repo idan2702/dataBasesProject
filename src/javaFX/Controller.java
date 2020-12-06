@@ -12,10 +12,17 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
 public class Controller {
+    private String id;
+    private String pass;
+    private File f;
+    private DataObj db;
+    ArrayList<DataObj> data = new ArrayList<DataObj>();
     private DbConnection dbConnection = new DbConnection();
     private boolean rest_choosed = false;
     @FXML
@@ -36,19 +43,22 @@ public class Controller {
         event.consume();
         Stage stage = new Stage();
         stage.initOwner(this.primaryStage);
-
         GetExtraInformation getExtraInformation = new GetExtraInformation();
         getExtraInformation.start(stage);
     }
 
+    public void setUserInfo(String id, String pass){
+        this.id = id;
+        this.pass = pass;
+    }
     @FXML
     public void setRestSelection(ActionEvent event) {
         event.consume();
         ObservableList<String> list = FXCollections.observableArrayList();
-        ArrayList<String> data = SetRestSelection(this.City.getText(), this.Countries.getText(),
+        this.data = SetRestSelection(this.City.getText(), this.Countries.getText(),
                 this.michelinStars, this.price);
-        for(int i = 0; i < data.size();i++){
-            list.add(data.get(i));
+        for (int i = 0; i < data.size(); i++) {
+            list.add(data.get(i).getName());
         }
         restSelection.setItems(list);
     }
@@ -80,7 +90,7 @@ public class Controller {
         System.out.println(priceChoice.getValue());
     }
 
-    private ArrayList<String> SetRestSelection(String city, String country, int michelinStars, int cost) {
+    private ArrayList<DataObj> SetRestSelection(String city, String country, int michelinStars, int cost) {
         String countrySearch = "";
         String citySearch = "";
         String michelinStarsSearch = "";
@@ -92,10 +102,10 @@ public class Controller {
                     michelinStarsSearch = "Rate='1star' AND ";
                     break;
                 case 2:
-                    michelinStarsSearch = "Rate='2star' AND ";
+                    michelinStarsSearch = "Rate='2stars' AND ";
                     break;
                 case 3:
-                    michelinStarsSearch = "Rate='3star' AND ";
+                    michelinStarsSearch = "Rate='3stars' AND ";
                     break;
                 default:
                     michelinStarsSearch = "Rate='1star' AND ";
@@ -131,13 +141,19 @@ public class Controller {
     public void restSelectionModified(ActionEvent event) {
         event.consume();
         rest_choosed = true;
-        // todo: add query
+        ChoiceBox<String> priceChoice = (ChoiceBox<String>) event.getSource();
+        for (DataObj dataObj : this.data) {
+            if (priceChoice.getValue() == dataObj.getName()) {
+                this.db = dataObj;
+            }
+        }
     }
 
 
     @FXML
     private void setEveryDayRest(ActionEvent event) {
         event.consume();
+        this.michelinStars = 0;
         System.out.println("standart rest choosed");
 
     }
@@ -155,7 +171,7 @@ public class Controller {
     }
 
     @FXML
-    private void getNearRest(ActionEvent event) {
+    private void getNearRest(ActionEvent event) throws Exception {
         event.consume();
         System.out.println("near rest choosed");
 
@@ -197,9 +213,22 @@ public class Controller {
             System.out.println(Countries.getText());
             final WebView browser = new WebView();
             final WebEngine webEngine = browser.getEngine();
-            webEngine.load("https://www.oetkercollection.com/fr/hotels/le-bristol-paris/restaurants-et-bar/restaurants/epicure/");
-            webEngine.setJavaScriptEnabled(true);
-            MapPlacer.setCenter(browser);
+            try {
+                if(this.db.getUrl() != null){
+                    webEngine.load(this.db.getUrl());
+                }else{
+                    f = new File("src/javaFX/404.html");
+                    webEngine.load(f.toURI().toString());
+                }
+                webEngine.setJavaScriptEnabled(true);
+                MapPlacer.setCenter(browser);
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("error!");
+                alert.setHeaderText(null);
+                alert.setContentText("failed: error occurred...");
+                alert.showAndWait();
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hey!");
@@ -211,15 +240,19 @@ public class Controller {
     }
 
     @FXML
-    public void setMap(ActionEvent event) {
+    public void setMap(ActionEvent event) throws IOException {
         event.consume();
         if (this.rest_choosed) {
             System.out.println(Countries.getText());
             final WebView browser = new WebView();
             final WebEngine webEngine = browser.getEngine();
-            webEngine.load(getClass().getResource("/javaFX/leaflet.html").toExternalForm());
+            HtmlHandler.editHtml(this.db.getLat(), this.db.getLon());
+            f = new File("src/javaFX/leafletWithMarker.html");
+            webEngine.load(f.toURI().toString());
             webEngine.setJavaScriptEnabled(true);
             MapPlacer.setCenter(browser);
+
+
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hey!");
@@ -230,16 +263,17 @@ public class Controller {
 
     }
 
+
     @FXML
-    public void StartingMap(Stage _primaryStage) {
+    public void StartingMap(Stage _primaryStage) throws IOException {
         this.primaryStage = _primaryStage;
         final WebView browser = new WebView();
         final WebEngine webEngine = browser.getEngine();
-        webEngine.load(getClass().getResource("/javaFX/leaflet.html").toExternalForm());
+        HtmlHandler.startMapHtml();
+        f = new File("src/javaFX/leafletWithMarker.html");
+        webEngine.load(f.toURI().toString());
         webEngine.setJavaScriptEnabled(true);
         MapPlacer.setCenter(browser);
-
-
     }
 
     @FXML
@@ -248,7 +282,7 @@ public class Controller {
         if (this.rest_choosed) {
             Stage stage = new Stage();
             stage.initOwner(this.primaryStage);
-            ShowInformation addData = new ShowInformation();
+            ShowInformation addData = new ShowInformation(this.db, this.id, this.pass);
             addData.start(stage);
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

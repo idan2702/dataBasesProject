@@ -1,8 +1,7 @@
 package javaFX;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,7 +11,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -21,79 +19,125 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.Callback;
+
 
 import java.util.ArrayList;
 
+
 public class NearestRests extends Application {
-    private ArrayList<ShowInformation.RestaurantInfo> arraylisRestaurantInfo = new ArrayList<ShowInformation.RestaurantInfo>();
-    private TableView<ShowInformation.RestaurantInfo> table = new TableView<ShowInformation.RestaurantInfo>();
-    private final ObservableList<ShowInformation.RestaurantInfo> data =
+    private DbConnection dbConnection = new DbConnection();
+    private double lat = -200;
+    private double lon = -200;
+    private String city;
+    private String country;
+    private TableView<nearRestaurantInfo> table = new TableView<nearRestaurantInfo>();
+    private ObservableList<nearRestaurantInfo> data =
             FXCollections.observableArrayList();
     final HBox hb = new HBox();
+
+    public void setdataArrayFromDb() throws Exception {
+        String countrySearch = "";
+        String citySearch = "";
+        String latSearch = "";
+        String lonSearch = "";
+        String price;
+        String sqlQuery = "SELECT * FROM restaurants_dbs.restaurants JOIN restaurants_dbs.locations USING(Name)";
+        if (lat > -200) {
+            latSearch = "Lat BETWEEN " + (lat -5) + " AND " + (lat  + 5) + " AND ";
+        }
+        if (lon > -200) {
+            lonSearch = "Lon BETWEEN " + (lon -5) + " AND " + (lon  + 5) + " AND ";
+        }
+        if (this.city != "") {
+            citySearch = "City ='" + city + "' AND ";
+        }
+        if (this.country != "") {
+            countrySearch = "Country ='" + country + "'";
+        }
+        if (countrySearch != "" || citySearch != "" || lonSearch != "" || latSearch != "") {
+            sqlQuery = sqlQuery + " WHERE " + latSearch + lonSearch + citySearch + countrySearch +";";
+        }
+        ArrayList<DataObj> list = dbConnection.AskDataBaseQuery(sqlQuery);
+        for (DataObj d : list) {
+            switch (d.getCost()) {
+                case 1:
+                    price = "$ - Cheap";
+                    break;
+                case 2:
+                    price = "$$ - Not Expensive";
+                    break;
+                case 3:
+                    price = "$$$ - Expensive";
+                    break;
+                case 4:
+                    price = "$$$$ - Very Expensive";
+                    break;
+                case 5:
+                    price = "$$$$$- Extremely Expensive";
+                    break;
+                default:
+                    price = "$ - Cheap";
+                    break;
+            }
+            data.add(new nearRestaurantInfo(price,d.getCountry(), d.getCity(), d.getName(), d.getCouisine()));
+        }
+    }
 
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws Exception {
         Scene scene = new Scene(new Group());
         stage.setTitle("Near Restaurants");
-        stage.setWidth(735);
+        stage.setWidth(1000);
         stage.setHeight(550);
-
         final Label label = new Label("Near Restaurants");
         label.setFont(new Font("Arial", 20));
 
-        table.setEditable(true);
-        Callback<TableColumn, TableCell> cellFactory =
-                new Callback<TableColumn, TableCell>() {
-                    public TableCell call(TableColumn p) {
-                        return new EditingCell();
-                    }
-                };
 
 
-        TableColumn RegionCol = new TableColumn("Region");
-        RegionCol.setMinWidth(200);
-        RegionCol.setCellValueFactory(
-                new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("region"));
-        RegionCol.setCellFactory(cellFactory);
+        TableColumn CountryCol = new TableColumn("Country");
+        CountryCol.setMinWidth(200);
+        CountryCol.setCellValueFactory(
+                new PropertyValueFactory<nearRestaurantInfo, String>("Country"));
+
 
         TableColumn CityCol = new TableColumn("City");
         CityCol.setMinWidth(200);
         CityCol.setCellValueFactory(
-                new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("city"));
-        CityCol.setCellFactory(cellFactory);
+                new PropertyValueFactory<nearRestaurantInfo, String>("city"));
+
 
 
         TableColumn NameCol = new TableColumn("Name");
         NameCol.setMinWidth(200);
         NameCol.setCellValueFactory(
-                new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("name"));
-        NameCol.setCellFactory(cellFactory);
+                new PropertyValueFactory<nearRestaurantInfo, String>("name"));
+
 
 
         TableColumn CuisineCol = new TableColumn("Cuisine");
-        CuisineCol.setMinWidth(100);
+        CuisineCol.setMinWidth(215);
         CuisineCol.setCellValueFactory(
-                new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("Cuisine"));
-        CuisineCol.setCellFactory(cellFactory);
+                new PropertyValueFactory<nearRestaurantInfo, String>("Cuisine"));
+
+
+        TableColumn PriceCol = new TableColumn("Price");
+        PriceCol.setMinWidth(150);
+        PriceCol.setCellValueFactory(
+                new PropertyValueFactory<nearRestaurantInfo, String>("Price"));
+
+
 
         table.setItems(data);
-        table.getColumns().addAll(RegionCol, CityCol, NameCol, CuisineCol);
+        table.getColumns().addAll(PriceCol,CountryCol,CityCol, NameCol, CuisineCol);
 
         final TextField addCountry = new TextField();
         addCountry.setPromptText("Country");
-        addCountry.setMaxWidth(RegionCol.getPrefWidth());
+        addCountry.setMaxWidth(CountryCol.getPrefWidth());
         addCountry.setMinWidth(100);
-
-
-        final TextField addRegion = new TextField();
-        addRegion.setPromptText("Region");
-        addRegion.setMaxWidth(RegionCol.getPrefWidth());
-        addRegion.setMinWidth(100);
 
 
         final TextField addCity = new TextField();
@@ -114,13 +158,20 @@ public class NearestRests extends Application {
         final Button addButton = new Button("Search");
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent e) {
-                //todo : get text from this fields serch in database and add...
-                // data.add(restaurantInfo);
+            public void handle(ActionEvent e){
+                lat = Double.parseDouble(addLatitude.getText());
+                lon = Double.parseDouble(addLongitude.getText());
+                city = addCity.getText();
+                country = addCountry.getText();
+                try {
+                    setdataArrayFromDb();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
-        hb.getChildren().addAll(addCountry, addRegion, addCity, addLatitude, addLongitude, addButton);
+        hb.getChildren().addAll(addCountry,addCity, addLatitude, addLongitude, addButton);
         hb.setSpacing(3);
 
         final VBox vbox = new VBox();
@@ -134,70 +185,62 @@ public class NearestRests extends Application {
         stage.show();
     }
 
+    public static class nearRestaurantInfo {
+        private final SimpleStringProperty price;
+        private final SimpleStringProperty country;
+        private final SimpleStringProperty city;
+        private final SimpleStringProperty name;
+        final SimpleStringProperty cuisine;
 
-    class EditingCell extends TableCell<ShowInformation.RestaurantInfo, String> {
+        public nearRestaurantInfo(String price,String country, String city, String name, String cuisine) {
+            this.country = new SimpleStringProperty(country);
+            this.price = new SimpleStringProperty(price);
+            this.city = new SimpleStringProperty(city);
+            this.name = new SimpleStringProperty(name);
+            this.cuisine = new SimpleStringProperty(cuisine);
 
-        private TextField textField;
 
-        public EditingCell() {
+        }
+        public String getCountry() {
+            return country.get();
         }
 
-        @Override
-        public void startEdit() {
-            if (!isEmpty()) {
-                super.startEdit();
-                createTextField();
-                setText(null);
-                setGraphic(textField);
-                textField.selectAll();
-            }
+        public void setCountry(String price) {
+            this.country.set(price);
         }
 
-        @Override
-        public void cancelEdit() {
-            super.cancelEdit();
-
-            setText((String) getItem());
-            setGraphic(null);
+        public String getPrice() {
+            return price.get();
         }
 
-        @Override
-        public void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-
-            if (empty) {
-                setText(null);
-                setGraphic(null);
-            } else {
-                if (isEditing()) {
-                    if (textField != null) {
-                        textField.setText(getString());
-                    }
-                    setText(null);
-                    setGraphic(textField);
-                } else {
-                    setText(getString());
-                    setGraphic(null);
-                }
-            }
+        public void setprice(String price) {
+            this.price.set(price);
         }
 
-        private void createTextField() {
-            textField = new TextField(getString());
-            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-            textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> arg0,
-                                    Boolean arg1, Boolean arg2) {
-                    if (!arg2) {
-                        commitEdit(textField.getText());
-                    }
-                }
-            });
+
+        public String getCuisine() {
+            return cuisine.get();
         }
 
-        private String getString() {
-            return getItem() == null ? "" : getItem().toString();
+        public void setCuisine(String cuisine) {
+            this.cuisine.set(cuisine);
+        }
+
+        public String getCity() {
+            return city.get();
+        }
+
+        public void setCity(String city) {
+            this.city.set(city);
+        }
+
+        public String getName() {
+            return name.get();
+        }
+
+        public void setName(String name) {
+            this.name.set(name);
         }
     }
+
 }

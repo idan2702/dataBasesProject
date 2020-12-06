@@ -34,13 +34,14 @@ public class Login extends NewMember {
                 primaryStage.setMaximized(true);
                 primaryStage.setScene(new Scene(root));
                 primaryStage.show();
+                myController.setUserInfo(this.log_id.getText(), this.log_pass.getText());
                 myController.StartingMap(primaryStage);
             }else{
-                System.out.println("failed: username or password are exists, please try again...");
+                System.out.println("failed: error occurred, please try again...");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("error!");
                 alert.setHeaderText(null);
-                alert.setContentText("failed: username or password are exists, please try again...");
+                alert.setContentText("failed: error occurred, please try again...");
                 alert.showAndWait();
             }
 
