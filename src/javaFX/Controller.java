@@ -47,10 +47,11 @@ public class Controller {
         getExtraInformation.start(stage);
     }
 
-    public void setUserInfo(String id, String pass){
+    public void setUserInfo(String id, String pass) {
         this.id = id;
         this.pass = pass;
     }
+
     @FXML
     public void setRestSelection(ActionEvent event) {
         event.consume();
@@ -89,6 +90,7 @@ public class Controller {
         }
         System.out.println(priceChoice.getValue());
     }
+
 
     private ArrayList<DataObj> SetRestSelection(String city, String country, int michelinStars, int cost) {
         String countrySearch = "";
@@ -159,13 +161,14 @@ public class Controller {
     }
 
     @FXML
-    private void addRest(ActionEvent event) {
+    private void addRest(ActionEvent event) throws Exception {
         event.consume();
+        ArrayList<LikedRestObj> likedRestObj = dbConnection.AskDataBaseLikedRestQuery(this.id);
         System.out.println("add rest choosed");
         Stage stage = new Stage();
         stage.initOwner(this.primaryStage);
 
-        AddData addData = new AddData();
+        AddData addData = new AddData(likedRestObj);
         addData.start(stage);
 
     }
@@ -214,9 +217,9 @@ public class Controller {
             final WebView browser = new WebView();
             final WebEngine webEngine = browser.getEngine();
             try {
-                if(this.db.getUrl() != null){
+                if (this.db.getUrl() != null) {
                     webEngine.load(this.db.getUrl());
-                }else{
+                } else {
                     f = new File("src/javaFX/404.html");
                     webEngine.load(f.toURI().toString());
                 }

@@ -40,7 +40,17 @@ public class DbConnection {
         }
         return data;
     }
-
+    public ArrayList<LikedRestObj> AskDataBaseLikedRestQuery(String userName) throws Exception {
+        ArrayList<LikedRestObj> data = new ArrayList<LikedRestObj>();
+        Statement statement = this.connection.createStatement();
+        String sqlQuery = "SELECT * FROM restaurants_dbs.likedrest WHERE userName = "+"\'"+userName+"\';";
+        ResultSet resultSet = statement.executeQuery(sqlQuery);
+        while (resultSet.next()) {
+            LikedRestObj likedRestObj = new LikedRestObj(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
+            data.add(likedRestObj);
+        }
+        return data;
+    }
     public ArrayList<String> isExist(String sqlQuery) throws Exception {
         ArrayList<String> returnVal = new ArrayList<String>();
         Statement statement = this.connection.createStatement();
@@ -63,6 +73,11 @@ public class DbConnection {
 
     public boolean setValInDataBase(String sqlQuery) throws Exception {
         boolean isSuccess = false;
+        PreparedStatement ps = this.connection.prepareStatement(sqlQuery);
+        int status = ps.executeUpdate();
+        if (status != 0) {
+            isSuccess = true;
+        }
         return isSuccess;
     }
 

@@ -1,7 +1,6 @@
 package javaFX;
 
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,52 +18,60 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.util.ArrayList;
+
 public class AddData extends Application {
-    private TableView<MyFavouritesRestaurantInfo> table = new TableView<MyFavouritesRestaurantInfo>();
-    private ObservableList<MyFavouritesRestaurantInfo> data =
+    private TableView<LikedRestObj> table = new TableView<LikedRestObj>();
+    private ObservableList<LikedRestObj> data =
             FXCollections.observableArrayList();
     final HBox hb = new HBox();
+    private ArrayList<LikedRestObj> likedRestObj = new ArrayList<LikedRestObj>();
+    private DbConnection dbConnection = new DbConnection();
+
+    public AddData(ArrayList<LikedRestObj> likedRestObj) {
+        this.likedRestObj = likedRestObj;
+    }
 
     public static void main(String[] args) {
         launch(args);
     }
 
     public void setdataArrayFromDb() {
-        //todo : get from db
-        data = FXCollections.observableArrayList(
-                new MyFavouritesRestaurantInfo("test1", "good"),
-                new MyFavouritesRestaurantInfo("test2", "shit"),
-                new MyFavouritesRestaurantInfo("test3", "nice"),
-                new MyFavouritesRestaurantInfo("test4", "very good"),
-                new MyFavouritesRestaurantInfo("test5", "i want to live there")
-        );
-
+        data = FXCollections.observableArrayList(likedRestObj);
     }
 
     private void addButtonToTable() {
-        TableColumn<MyFavouritesRestaurantInfo, Void> colBtn = new TableColumn("Unlike Restaurant..");
+        TableColumn<LikedRestObj, Void> colBtn = new TableColumn("Unlike Restaurant..");
         colBtn.setMinWidth(200);
-        Callback<TableColumn<MyFavouritesRestaurantInfo, Void>, TableCell<MyFavouritesRestaurantInfo, Void>> cellFactory = new Callback<TableColumn<MyFavouritesRestaurantInfo, Void>, TableCell<MyFavouritesRestaurantInfo, Void>>() {
+        Callback<TableColumn<LikedRestObj, Void>, TableCell<LikedRestObj, Void>> cellFactory = new Callback<TableColumn<LikedRestObj, Void>, TableCell<LikedRestObj, Void>>() {
             @Override
-            public TableCell<MyFavouritesRestaurantInfo, Void> call(final TableColumn<MyFavouritesRestaurantInfo, Void> param) {
-                final TableCell<MyFavouritesRestaurantInfo, Void> cell = new TableCell<MyFavouritesRestaurantInfo, Void>() {
+            public TableCell<LikedRestObj, Void> call(final TableColumn<LikedRestObj, Void> param) {
+                final TableCell<LikedRestObj, Void> cell = new TableCell<LikedRestObj, Void>() {
 
                     private final Button btn = new Button("Unlike");
 
                     {
                         btn.setOnAction((ActionEvent event) -> {
-                            MyFavouritesRestaurantInfo rest = getTableView().getItems().get(getIndex());
+                            LikedRestObj rest = getTableView().getItems().get(getIndex());
                             int index_to_remove = find_index_of_rest(rest.getName());
-                            if(index_to_remove >= 0){
+                            if (index_to_remove >= 0) {
                                 data.remove(index_to_remove);
                                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                 alert.setTitle("Hey!");
                                 alert.setHeaderText(null);
                                 alert.setContentText("You unliked \"" + rest.getName() + "\"");
                                 btn.minWidth(100);
-                                //todo:remove fome database
+                                String query = "DELETE FROM `restaurants_dbs`.`likedrest` WHERE (`userName` = '"
+                                        +likedRestObj.get(index_to_remove).getUserName()+"')"+"and (`restName` = '"+likedRestObj.get(index_to_remove).getName()+"');";
+                                try {
+                                    if(!dbConnection.deleteValInDataBase(query)){
+                                        newErorAlert();
+                                    }
+                                } catch (Exception e) {
+                                    newErorAlert();
+                                }
                                 alert.showAndWait();
-                            }else{
+                            } else {
                                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                 alert.setTitle("Hey!");
                                 alert.setHeaderText(null);
@@ -93,13 +100,22 @@ public class AddData extends Application {
         table.getColumns().add(colBtn);
 
     }
-    private int find_index_of_rest(String name){
-        for(int i = 0; i < data.size(); i++){
-            if(data.get(i).getName() == name){
+
+    private int find_index_of_rest(String name) {
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getName() == name) {
                 return i;
             }
         }
         return -1;
+    }
+
+    private void newErorAlert(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("error!");
+        alert.setHeaderText(null);
+        alert.setContentText("failed:error occurred, please try again...");
+        alert.showAndWait();
     }
     @Override
     public void start(Stage stage) {
@@ -122,20 +138,20 @@ public class AddData extends Application {
         TableColumn NameCol = new TableColumn("Name");
         NameCol.setMinWidth(200);
         NameCol.setCellValueFactory(
-                new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("name"));
+                new PropertyValueFactory<LikedRestObj, String>("restName"));
 
         TableColumn DescriptionCol = new TableColumn("Description");
         DescriptionCol.setMinWidth(500);
         DescriptionCol.setCellValueFactory(
-                new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("description"));
+                new PropertyValueFactory<LikedRestObj, String>("Review"));
         DescriptionCol.setCellFactory(cellFactory);
         DescriptionCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<ShowInformation.RestaurantInfo, String>>() {
+                new EventHandler<TableColumn.CellEditEvent<LikedRestObj, String>>() {
                     @Override
-                    public void handle(TableColumn.CellEditEvent<ShowInformation.RestaurantInfo, String> t) {
-                        ((ShowInformation.RestaurantInfo) t.getTableView().getItems().get(
+                    public void handle(TableColumn.CellEditEvent<LikedRestObj, String> t) {
+                        ((LikedRestObj) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
-                        ).setCuisine(t.getNewValue());
+                        ).setDescription(t.getNewValue());
                     }
                 }
         );
@@ -147,9 +163,18 @@ public class AddData extends Application {
         SaveAndQuitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-
-                //todo : add to table and close page... ( add from the list )
-
+                for (int i = 0; i < likedRestObj.size(); i++) {
+                    System.out.println(likedRestObj.get(i).getReview());
+                    String sqlQuery = "UPDATE restaurants_dbs.likedrest SET Review = '" + likedRestObj.get(i).getReview() +
+                            "' WHERE (userName = '" + likedRestObj.get(i).getUserName() + "') and (restName = '" + likedRestObj.get(i).getName() + "');";
+                    try {
+                        if(!dbConnection.setValInDataBase(sqlQuery)){
+                            newErorAlert();
+                        }
+                    } catch (Exception e1) {
+                        newErorAlert();
+                    }
+                }
             }
         });
         hb.getChildren().addAll(SaveAndQuitButton);
@@ -167,7 +192,7 @@ public class AddData extends Application {
     }
 
 
-    class EditingCell extends TableCell<MyFavouritesRestaurantInfo, String> {
+    class EditingCell extends TableCell<LikedRestObj, String> {
 
         private TextField textField;
 
@@ -230,37 +255,6 @@ public class AddData extends Application {
 
         private String getString() {
             return getItem() == null ? "" : getItem().toString();
-        }
-    }
-
-    public static class MyFavouritesRestaurantInfo {
-        private final SimpleStringProperty name;
-        private final SimpleStringProperty description;
-
-
-        public MyFavouritesRestaurantInfo(String name, String description) {
-
-            this.name = new SimpleStringProperty(name);
-            this.description = new SimpleStringProperty(description);
-
-
-        }
-
-        public String getDescription() {
-            return description.get();
-        }
-
-        public void setDescription(String description) {
-            this.description.set(description);
-        }
-
-
-        public String getName() {
-            return name.get();
-        }
-
-        public void setName(String name) {
-            this.name.set(name);
         }
     }
 }
