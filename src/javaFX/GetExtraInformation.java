@@ -1,6 +1,8 @@
 package javaFX;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -17,14 +19,19 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+
 import java.util.ArrayList;
 
 public class GetExtraInformation extends Application {
-    private ArrayList<ShowInformation.RestaurantInfo> arraylisRestaurantInfo = new ArrayList<ShowInformation.RestaurantInfo>();
-    private TableView<ShowInformation.RestaurantInfo> table = new TableView<ShowInformation.RestaurantInfo>();
-    private final ObservableList<ShowInformation.RestaurantInfo> data =
+    private DbConnection dbConnection = new DbConnection();
+    private TableView<priceRestData> tableRests = new TableView<priceRestData>();
+    private TableView<likedRestData> tableLikes = new TableView<likedRestData>();
+    private  ObservableList<priceRestData> dataRests =
+            FXCollections.observableArrayList();
+    private  ObservableList<likedRestData> dataLikes =
             FXCollections.observableArrayList();
     final HBox hb = new HBox();
+    private VBox vbox = new VBox();
 
     public static void main(String[] args) {
         launch(args);
@@ -33,90 +40,152 @@ public class GetExtraInformation extends Application {
     @Override
     public void start(Stage stage) {
         Scene scene = new Scene(new Group());
-        stage.setTitle("Near Restaurants");
+        stage.setTitle("Extra Information");
         stage.setWidth(735);
         stage.setHeight(550);
 
         final Label label = new Label("Near Restaurants");
         label.setFont(new Font("Arial", 20));
 
-        table.setEditable(true);
+        tableRests.setEditable(true);
+        tableLikes.setEditable(true);
+
+        TableColumn PriceCol = new TableColumn("Cost");
+        PriceCol.setMinWidth(200);
+        PriceCol.setCellValueFactory(
+                new PropertyValueFactory<priceRestData, String>("Cost"));
 
 
-        TableColumn RegionCol = new TableColumn("Region");
-        RegionCol.setMinWidth(200);
-        RegionCol.setCellValueFactory(
-                new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("region"));
-
-
-        TableColumn CityCol = new TableColumn("City");
-        CityCol.setMinWidth(200);
-        CityCol.setCellValueFactory(
-                new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("city"));
-
+        TableColumn RateCol = new TableColumn("Rate");
+        RateCol.setMinWidth(200);
+        RateCol.setCellValueFactory(
+                new PropertyValueFactory<priceRestData, String>("Rate"));
 
 
         TableColumn NameCol = new TableColumn("Name");
         NameCol.setMinWidth(200);
         NameCol.setCellValueFactory(
-                new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("name"));
+                new PropertyValueFactory<priceRestData, String>("Name"));
 
 
         TableColumn CuisineCol = new TableColumn("Cuisine");
         CuisineCol.setMinWidth(100);
         CuisineCol.setCellValueFactory(
-                new PropertyValueFactory<ShowInformation.RestaurantInfo, String>("Cuisine"));
+                new PropertyValueFactory<priceRestData, String>("Cuisine"));
 
 
-        table.setItems(data);
-        table.getColumns().addAll(RegionCol, CityCol, NameCol, CuisineCol);
+        tableRests.setItems(dataRests);
+        tableRests.getColumns().addAll(NameCol, PriceCol, RateCol, CuisineCol);
+
+
+        TableColumn LikeCol = new TableColumn("Like");
+        LikeCol.setMinWidth(200);
+        LikeCol.setCellValueFactory(
+                new PropertyValueFactory<likedRestData, Integer>("Like"));
+
+
+        TableColumn NameColLikes = new TableColumn("restName");
+        NameColLikes.setMinWidth(200);
+        NameColLikes.setCellValueFactory(
+                new PropertyValueFactory<likedRestData, String>("restName"));
+
+
+        tableLikes.setItems(dataLikes);
+        tableLikes.getColumns().addAll(NameColLikes, LikeCol);
 
 
         final Button cheapest_restaurants = new Button("Cheapest Restaurants");
         cheapest_restaurants.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                //todo : get text from this fields serch in database and add...
-                // data.add(restaurantInfo);
-                final ObservableList<ShowInformation.RestaurantInfo> data =
-                        FXCollections.observableArrayList(
-                               // new ShowInformation.RestaurantInfo("$", "4935067", "Israel", "Tel-Aviv", "test2", "Israel")
-                        );
-                table.getItems().clear();
-                table.setItems(data);
+                try {
+                    vbox.getChildren().add(tableRests);
+                } catch (Exception E) {
+                }
+                try {
+                    vbox.getChildren().remove(tableLikes);
+                } catch (Exception E) {
+                }
+                try {
 
+                } catch (Exception E) {
+                }
+                try {
+                    String sqlQuery = "SELECT Cost,Rate,Name,Cuisine FROM restaurants_dbs.restaurants WHERE rate !=" +
+                            " '1star' AND  Rate != '2stars' AND Rate != '3stars' order by cost asc limit 20;";
+                    ArrayList<priceRestData> list = dbConnection.AskDataBaseQueryforPriceExtraInformation(sqlQuery);
+                    ObservableList<priceRestData> temp = FXCollections.observableArrayList();
+                    for (int i = 0; i < list.size(); i++) {
+                        temp.add(list.get(i));
+                    }
+                    tableRests.getItems().clear();
+                    tableRests.setItems(temp);
+                } catch (Exception E) {
+                }
             }
         });
         final Button most_expensive_restaurants = new Button("Most Expensive Restaurants");
         most_expensive_restaurants.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                //todo : get text from this fields serch in database and add...
-                // data.add(restaurantInfo);
-                final ObservableList<ShowInformation.RestaurantInfo> data =
-                        FXCollections.observableArrayList(
-                                //new ShowInformation.RestaurantInfo("$$$$$", "1401 K", "Austria", "Salzburg", "test1", "French")
-                        );
-                table.getItems().clear();
-                table.setItems(data);
+                try {
+                    vbox.getChildren().add(tableLikes);
+                } catch (Exception E) {
+                }
+                try {
+                    vbox.getChildren().remove(tableRests);
+                } catch (Exception E) {
+                }
+                try {
+                    String sqlQuery = "SELECT Cost,Rate,Name,Cuisine FROM restaurants_dbs.restaurants WHERE rate" +
+                            " = '3stars' order by cost desc limit 20;";
+                    ArrayList<priceRestData> list = dbConnection.AskDataBaseQueryforPriceExtraInformation(sqlQuery);
+                    ObservableList<priceRestData> temp = FXCollections.observableArrayList();
+                    for (int i = 0; i < list.size(); i++) {
+                        temp.add(list.get(i));
+                    }
+                    tableRests.getItems().clear();
+                    tableRests.setItems(temp);
+                } catch (Exception E) {
+                }
+
             }
         });
         final Button most_liked_restaurants = new Button("Most Liked Restaurants");
         most_liked_restaurants.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                //todo : get text from this fields serch in database and add...
-                // data.add(restaurantInfo);
+                try {
+                    vbox.getChildren().remove(tableRests);
+                } catch (Exception E) {
+                }
+                try {
+                    vbox.getChildren().add(tableLikes);
+                } catch (Exception E) {
+                }
+                try {
+                    String sqlQuery = "SELECT * FROM (SELECT isLiked.restName, count(isLiked.Like)" +
+                            " AS likes FROM (SELECT restaurants_dbs.likedrest.restName, restaurants_dbs.likedrest.Like" +
+                            " FROM restaurants_dbs.likedrest WHERE restaurants_dbs.likedrest.Like='yes') AS isLiked" +
+                            " group by isLiked.restName) AS ordered ORDER BY ordered.likes desc limit 150;";
+                    ArrayList<likedRestData> list = dbConnection.AskDataBaseQueryforExtraInformation(sqlQuery);
+                    ObservableList<likedRestData> temp = FXCollections.observableArrayList();
+                    for (int i = 0; i < list.size(); i++) {
+                        temp.add(list.get(i));
+                    }
+                    tableLikes.getItems().clear();
+                    tableLikes.setItems(temp);
+                } catch (Exception E) {
+                }
+
             }
         });
 
         hb.getChildren().addAll(cheapest_restaurants, most_expensive_restaurants, most_liked_restaurants);
         hb.setSpacing(5);
-
-        final VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table, hb);
+        vbox.getChildren().addAll(label, hb);
 
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
 
@@ -190,4 +259,83 @@ public class GetExtraInformation extends Application {
             return getItem() == null ? "" : getItem().toString();
         }
     }
+
+    public static class priceRestData {
+        private final SimpleIntegerProperty Cost;
+        private final SimpleStringProperty Name;
+        private final SimpleStringProperty Cuisine;
+        private final SimpleStringProperty Rate;
+
+        public priceRestData(Integer Cost, String Rate, String Name, String Cuisine) {
+
+            this.Cost = new SimpleIntegerProperty(Cost);
+            this.Rate = new SimpleStringProperty(Rate);
+            this.Name = new SimpleStringProperty(Name);
+            this.Cuisine = new SimpleStringProperty(Cuisine);
+
+
+        }
+
+
+        public Integer getCost() {
+            return Cost.get();
+        }
+
+        public void setCost(Integer price) {
+            this.Cost.set(price);
+        }
+
+
+        public String getCuisine() {
+            return Cuisine.get();
+        }
+
+        public void setCuisine(String cuisine) {
+            this.Cuisine.set(cuisine);
+        }
+
+        public String getRate() {
+            return Rate.get();
+        }
+
+        public void setRate(String rate) {
+            this.Rate.set(rate);
+        }
+
+        public String getName() {
+            return Name.get();
+        }
+
+        public void setName(String name) {
+            this.Name.set(name);
+        }
+    }
+
+    public static class likedRestData {
+        private final SimpleStringProperty restName;
+        private final SimpleIntegerProperty Like;
+
+        public likedRestData(String restName, Integer Like) {
+            this.Like = new SimpleIntegerProperty(Like);
+            this.restName = new SimpleStringProperty(restName);
+        }
+
+
+        public Integer getLikes() {
+            return Like.get();
+        }
+
+        public void setLikes(Integer likes) {
+            this.Like.set(likes);
+        }
+
+        public String getName() {
+            return restName.get();
+        }
+
+        public void setName(String name) {
+            this.restName.set(name);
+        }
+    }
 }
+

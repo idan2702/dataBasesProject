@@ -40,6 +40,29 @@ public class DbConnection {
         }
         return data;
     }
+
+    public ArrayList<GetExtraInformation.likedRestData> AskDataBaseQueryforExtraInformation(String sqlQuery) throws Exception {
+        ArrayList<GetExtraInformation.likedRestData> data = new ArrayList<GetExtraInformation.likedRestData>();
+        Statement statement = this.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sqlQuery);
+        while (resultSet.next()) {
+            GetExtraInformation.likedRestData dataObj = new GetExtraInformation.likedRestData(resultSet.getString(1), resultSet.getInt(2));
+            data.add(dataObj);
+        }
+        return data;
+    }
+
+    public ArrayList<GetExtraInformation.priceRestData> AskDataBaseQueryforPriceExtraInformation(String sqlQuery) throws Exception {
+        ArrayList<GetExtraInformation.priceRestData> data = new ArrayList<GetExtraInformation.priceRestData>();
+        Statement statement = this.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sqlQuery);
+        while (resultSet.next()) {
+            GetExtraInformation.priceRestData dataObj = new GetExtraInformation.priceRestData(resultSet.getInt(1),resultSet.getString(2), resultSet.getString(3),resultSet.getString(4));
+            data.add(dataObj);
+        }
+        return data;
+    }
+
     public ArrayList<LikedRestObj> AskDataBaseLikedRestQuery(String userName) throws Exception {
         ArrayList<LikedRestObj> data = new ArrayList<LikedRestObj>();
         Statement statement = this.connection.createStatement();

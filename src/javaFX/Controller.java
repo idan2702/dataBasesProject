@@ -58,7 +58,11 @@ public class Controller {
         ObservableList<String> list = FXCollections.observableArrayList();
         this.data = SetRestSelection(this.City.getText(), this.Countries.getText(),
                 this.michelinStars, this.price);
-        for (int i = 0; i < data.size(); i++) {
+        int len = data.size();
+        if(data.size() > 150){
+            len = 150;
+        }
+        for (int i = 0; i < len; i++) {
             list.add(data.get(i).getName());
         }
         restSelection.setItems(list);
@@ -98,32 +102,42 @@ public class Controller {
         String michelinStarsSearch = "";
         String costSearch = "";
         String sqlQuery = "SELECT * FROM restaurants_dbs.restaurants JOIN restaurants_dbs.locations USING(Name)";
+
+        if (!country.equals("")) {
+            countrySearch = "Country ='" + country + "'";
+        }
+        if (!city.equals("")) {
+            if(!countrySearch.equals("")){
+                countrySearch += " AND ";
+            }
+            citySearch = "City ='" + city + "'";
+        }
         if (michelinStars >= 1) {
+            if(!citySearch.equals("")){
+                countrySearch += " AND ";
+            }
             switch (michelinStars) {
                 case 1:
-                    michelinStarsSearch = "Rate='1star' AND ";
+                    michelinStarsSearch = "Rate='1star'";
                     break;
                 case 2:
-                    michelinStarsSearch = "Rate='2stars' AND ";
+                    michelinStarsSearch = "Rate='2stars'";
                     break;
                 case 3:
-                    michelinStarsSearch = "Rate='3stars' AND ";
+                    michelinStarsSearch = "Rate='3stars'";
                     break;
                 default:
-                    michelinStarsSearch = "Rate='1star' AND ";
+                    michelinStarsSearch = "Rate='1star'";
                     break;
             }
         }
         if (cost > 0) {
+            if(!michelinStarsSearch.equals("")){
+                michelinStarsSearch += " AND ";
+            }
             costSearch = "Cost =" + cost + " ";
         }
-        if (country != "") {
-            countrySearch = "Country ='" + country + "' AND ";
-        }
-        if (city != "") {
-            countrySearch = "City ='" + city + "' AND ";
-        }
-        if (countrySearch != "" || citySearch != "" || michelinStarsSearch != "" || costSearch != "") {
+        if (!countrySearch.equals("") || !citySearch.equals("") || !michelinStarsSearch.equals("") || !costSearch.equals("")) {
             sqlQuery = sqlQuery + " WHERE " + countrySearch + citySearch + michelinStarsSearch + costSearch + ";";
         }
         try {

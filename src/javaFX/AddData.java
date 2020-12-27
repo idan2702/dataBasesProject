@@ -25,6 +25,7 @@ public class AddData extends Application {
     private ObservableList<LikedRestObj> data =
             FXCollections.observableArrayList();
     final HBox hb = new HBox();
+
     private ArrayList<LikedRestObj> likedRestObj = new ArrayList<LikedRestObj>();
     private DbConnection dbConnection = new DbConnection();
 
@@ -138,7 +139,7 @@ public class AddData extends Application {
         TableColumn NameCol = new TableColumn("Name");
         NameCol.setMinWidth(200);
         NameCol.setCellValueFactory(
-                new PropertyValueFactory<LikedRestObj, String>("restName"));
+                new PropertyValueFactory<LikedRestObj, String>("name"));
 
         TableColumn DescriptionCol = new TableColumn("Description");
         DescriptionCol.setMinWidth(500);
@@ -159,25 +160,21 @@ public class AddData extends Application {
         table.getColumns().addAll(NameCol, DescriptionCol);
         addButtonToTable();
 
-        final Button SaveAndQuitButton = new Button("Save And Quit");
-        SaveAndQuitButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                for (int i = 0; i < likedRestObj.size(); i++) {
-                    System.out.println(likedRestObj.get(i).getReview());
-                    String sqlQuery = "UPDATE restaurants_dbs.likedrest SET Review = '" + likedRestObj.get(i).getReview() +
-                            "' WHERE (userName = '" + likedRestObj.get(i).getUserName() + "') and (restName = '" + likedRestObj.get(i).getName() + "');";
-                    try {
-                        if(!dbConnection.setValInDataBase(sqlQuery)){
-                            newErorAlert();
-                        }
-                    } catch (Exception e1) {
+
+        stage.setOnCloseRequest( ev -> {
+            for (int i = 0; i < likedRestObj.size(); i++) {
+                System.out.println(likedRestObj.get(i).getReview());
+                String sqlQuery = "UPDATE restaurants_dbs.likedrest SET Review = '" + likedRestObj.get(i).getReview() +
+                        "' WHERE (userName = '" + likedRestObj.get(i).getUserName() + "') and (restName = '" + likedRestObj.get(i).getName() + "');";
+                try {
+                    if(!dbConnection.setValInDataBase(sqlQuery)){
                         newErorAlert();
                     }
+                } catch (Exception e1) {
+                    newErorAlert();
                 }
             }
         });
-        hb.getChildren().addAll(SaveAndQuitButton);
         hb.setSpacing(3);
 
         final VBox vbox = new VBox();

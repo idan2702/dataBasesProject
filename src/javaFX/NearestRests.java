@@ -43,21 +43,32 @@ public class NearestRests extends Application {
         String price;
         String sqlQuery = "SELECT * FROM restaurants_dbs.restaurants JOIN restaurants_dbs.locations USING(Name)";
         if (lat > -200) {
-            latSearch = "Lat BETWEEN " + (lat -5) + " AND " + (lat  + 5) + " AND ";
+            latSearch = "Lat BETWEEN " + (lat -5) + " AND " + (lat  + 5);
         }
         if (lon > -200) {
+            if(!latSearch.equals("")){
+                latSearch += " AND ";
+            }
             lonSearch = "Lon BETWEEN " + (lon -5) + " AND " + (lon  + 5) + " AND ";
         }
-        if (this.city != "") {
-            citySearch = "City ='" + city + "' AND ";
+        if (!this.city.equals("")) {
+            if(!lonSearch.equals("")){
+                lonSearch += " AND ";
+            }
+            citySearch = "City ='" + city + "'";
         }
-        if (this.country != "") {
+        if (!this.country.equals("")) {
+            if(!citySearch.equals("")){
+                citySearch +=" AND ";
+            }
             countrySearch = "Country ='" + country + "'";
         }
-        if (countrySearch != "" || citySearch != "" || lonSearch != "" || latSearch != "") {
+        if (!countrySearch.equals("") || !citySearch.equals("") || !lonSearch.equals("") || !latSearch.equals("")) {
             sqlQuery = sqlQuery + " WHERE " + latSearch + lonSearch + citySearch + countrySearch +";";
         }
         ArrayList<DataObj> list = dbConnection.AskDataBaseQuery(sqlQuery);
+        ObservableList<nearRestaurantInfo> temp =  FXCollections.observableArrayList();
+        int counter = 0;
         for (DataObj d : list) {
             switch (d.getCost()) {
                 case 1:
@@ -79,8 +90,14 @@ public class NearestRests extends Application {
                     price = "$ - Cheap";
                     break;
             }
-            data.add(new nearRestaurantInfo(price,d.getCountry(), d.getCity(), d.getName(), d.getCouisine()));
+            temp.add(new nearRestaurantInfo(price,d.getCountry(), d.getCity(), d.getName(), d.getCouisine()));
+            if(counter == 150){
+                break;
+            }
+            counter ++;
         }
+        this.data = temp;
+        table.setItems(data);
     }
 
     public static void main(String[] args) {
@@ -159,10 +176,27 @@ public class NearestRests extends Application {
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e){
-                lat = Double.parseDouble(addLatitude.getText());
-                lon = Double.parseDouble(addLongitude.getText());
-                city = addCity.getText();
-                country = addCountry.getText();
+                try {
+                    lat = Double.parseDouble(addLatitude.getText());
+                }catch (Exception e1){
+                    lat = -200;
+                }
+                try {
+                    lon = Double.parseDouble(addLongitude.getText());
+                }catch (Exception e1){
+                    lon = -200;
+                }
+                try{
+                    city = addCity.getText();
+                }catch (Exception e1){
+                    city = "";
+                }
+                try{
+                    country = addCountry.getText();
+                }catch (Exception e1){
+                    country = "";
+                }
+
                 try {
                     setdataArrayFromDb();
                 } catch (Exception e1) {
