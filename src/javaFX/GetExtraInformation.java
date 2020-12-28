@@ -3,8 +3,6 @@ package javaFX;
 import javafx.application.Application;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,10 +24,8 @@ public class GetExtraInformation extends Application {
     private DbConnection dbConnection = new DbConnection();
     private TableView<priceRestData> tableRests = new TableView<priceRestData>();
     private TableView<likedRestData> tableLikes = new TableView<likedRestData>();
-    private  ObservableList<priceRestData> dataRests =
-            FXCollections.observableArrayList();
-    private  ObservableList<likedRestData> dataLikes =
-            FXCollections.observableArrayList();
+    private ObservableList<priceRestData> dataRests = FXCollections.observableArrayList();
+    private ObservableList<likedRestData> dataLikes = FXCollections.observableArrayList();
     final HBox hb = new HBox();
     private VBox vbox = new VBox();
 
@@ -51,25 +47,25 @@ public class GetExtraInformation extends Application {
         tableLikes.setEditable(true);
 
         TableColumn PriceCol = new TableColumn("Cost");
-        PriceCol.setMinWidth(200);
+        PriceCol.setMinWidth(125);
         PriceCol.setCellValueFactory(
                 new PropertyValueFactory<priceRestData, String>("Cost"));
 
 
         TableColumn RateCol = new TableColumn("Rate");
-        RateCol.setMinWidth(200);
+        RateCol.setMinWidth(125);
         RateCol.setCellValueFactory(
                 new PropertyValueFactory<priceRestData, String>("Rate"));
 
 
         TableColumn NameCol = new TableColumn("Name");
-        NameCol.setMinWidth(200);
+        NameCol.setMinWidth(225);
         NameCol.setCellValueFactory(
                 new PropertyValueFactory<priceRestData, String>("Name"));
 
 
         TableColumn CuisineCol = new TableColumn("Cuisine");
-        CuisineCol.setMinWidth(100);
+        CuisineCol.setMinWidth(225);
         CuisineCol.setCellValueFactory(
                 new PropertyValueFactory<priceRestData, String>("Cuisine"));
 
@@ -78,16 +74,16 @@ public class GetExtraInformation extends Application {
         tableRests.getColumns().addAll(NameCol, PriceCol, RateCol, CuisineCol);
 
 
-        TableColumn LikeCol = new TableColumn("Like");
-        LikeCol.setMinWidth(200);
+        TableColumn LikeCol = new TableColumn("Likes");
+        LikeCol.setMinWidth(350);
         LikeCol.setCellValueFactory(
-                new PropertyValueFactory<likedRestData, Integer>("Like"));
+                new PropertyValueFactory<likedRestData, Integer>("likes"));
 
 
-        TableColumn NameColLikes = new TableColumn("restName");
-        NameColLikes.setMinWidth(200);
+        TableColumn NameColLikes = new TableColumn("Name");
+        NameColLikes.setMinWidth(350);
         NameColLikes.setCellValueFactory(
-                new PropertyValueFactory<likedRestData, String>("restName"));
+                new PropertyValueFactory<likedRestData, String>("Name"));
 
 
         tableLikes.setItems(dataLikes);
@@ -129,11 +125,11 @@ public class GetExtraInformation extends Application {
             @Override
             public void handle(ActionEvent e) {
                 try {
-                    vbox.getChildren().add(tableLikes);
+                    vbox.getChildren().add(tableRests);
                 } catch (Exception E) {
                 }
                 try {
-                    vbox.getChildren().remove(tableRests);
+                    vbox.getChildren().remove(tableLikes);
                 } catch (Exception E) {
                 }
                 try {
@@ -161,9 +157,6 @@ public class GetExtraInformation extends Application {
                 }
                 try {
                     vbox.getChildren().add(tableLikes);
-                } catch (Exception E) {
-                }
-                try {
                     String sqlQuery = "SELECT * FROM (SELECT isLiked.restName, count(isLiked.Like)" +
                             " AS likes FROM (SELECT restaurants_dbs.likedrest.restName, restaurants_dbs.likedrest.Like" +
                             " FROM restaurants_dbs.likedrest WHERE restaurants_dbs.likedrest.Like='yes') AS isLiked" +
@@ -177,7 +170,6 @@ public class GetExtraInformation extends Application {
                     tableLikes.setItems(temp);
                 } catch (Exception E) {
                 }
-
             }
         });
 
@@ -193,72 +185,6 @@ public class GetExtraInformation extends Application {
         stage.show();
     }
 
-
-    class EditingCell extends TableCell<ShowInformation.RestaurantInfo, String> {
-
-        private TextField textField;
-
-        public EditingCell() {
-        }
-
-        @Override
-        public void startEdit() {
-            if (!isEmpty()) {
-                super.startEdit();
-                createTextField();
-                setText(null);
-                setGraphic(textField);
-                textField.selectAll();
-            }
-        }
-
-        @Override
-        public void cancelEdit() {
-            super.cancelEdit();
-
-            setText((String) getItem());
-            setGraphic(null);
-        }
-
-        @Override
-        public void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-
-            if (empty) {
-                setText(null);
-                setGraphic(null);
-            } else {
-                if (isEditing()) {
-                    if (textField != null) {
-                        textField.setText(getString());
-                    }
-                    setText(null);
-                    setGraphic(textField);
-                } else {
-                    setText(getString());
-                    setGraphic(null);
-                }
-            }
-        }
-
-        private void createTextField() {
-            textField = new TextField(getString());
-            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-            textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> arg0,
-                                    Boolean arg1, Boolean arg2) {
-                    if (!arg2) {
-                        commitEdit(textField.getText());
-                    }
-                }
-            });
-        }
-
-        private String getString() {
-            return getItem() == null ? "" : getItem().toString();
-        }
-    }
 
     public static class priceRestData {
         private final SimpleIntegerProperty Cost;
@@ -313,20 +239,20 @@ public class GetExtraInformation extends Application {
 
     public static class likedRestData {
         private final SimpleStringProperty restName;
-        private final SimpleIntegerProperty Like;
+        private final SimpleIntegerProperty likes;
 
-        public likedRestData(String restName, Integer Like) {
-            this.Like = new SimpleIntegerProperty(Like);
+        public likedRestData(String restName, Integer likes) {
+            this.likes = new SimpleIntegerProperty(likes);
             this.restName = new SimpleStringProperty(restName);
         }
 
 
         public Integer getLikes() {
-            return Like.get();
+            return likes.get();
         }
 
         public void setLikes(Integer likes) {
-            this.Like.set(likes);
+            this.likes.set(likes);
         }
 
         public String getName() {
