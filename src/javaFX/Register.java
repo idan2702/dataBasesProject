@@ -56,7 +56,9 @@ public class Register  extends NewMember {
                 String query = "INSERT INTO `restaurants_dbs`.`users` (`Username`, `Password`) VALUES ('"
                         + id + "', '" + pass + "');";
                 DbConnection dbConnection = new DbConnection();
-                return dbConnection.AddtoDataBase(query);
+                boolean ans = dbConnection.AddtoDataBase(query);
+                dbConnection.disconnect();
+                return ans;
             }else{
                 System.out.println("failed: username or password are exists, please try again...");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

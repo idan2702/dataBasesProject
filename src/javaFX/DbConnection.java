@@ -21,6 +21,13 @@ public class DbConnection {
             e.printStackTrace();
         }
     }
+    public void disconnect(){
+        try {
+            this.connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public Connection getConnection() {
         return this.connection;

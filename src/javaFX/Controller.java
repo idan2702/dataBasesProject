@@ -23,7 +23,6 @@ public class Controller {
     private File f;
     private DataObj db;
     ArrayList<DataObj> data = new ArrayList<DataObj>();
-    private DbConnection dbConnection = new DbConnection();
     private boolean rest_choosed = false;
     @FXML
     private ChoiceBox restSelection;
@@ -114,7 +113,7 @@ public class Controller {
         }
         if (michelinStars >= 1) {
             if(!citySearch.equals("")){
-                countrySearch += " AND ";
+                citySearch += " AND ";
             }
             switch (michelinStars) {
                 case 1:
@@ -141,7 +140,11 @@ public class Controller {
             sqlQuery = sqlQuery + " WHERE " + countrySearch + citySearch + michelinStarsSearch + costSearch + ";";
         }
         try {
-            return dbConnection.AskDataBaseQuery(sqlQuery);
+            DbConnection dbConnection = new DbConnection();
+            ArrayList<DataObj> ans = dbConnection.AskDataBaseQuery(sqlQuery);
+            dbConnection.disconnect();
+            return ans;
+
 
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -177,7 +180,9 @@ public class Controller {
     @FXML
     private void addRest(ActionEvent event) throws Exception {
         event.consume();
+        DbConnection dbConnection = new DbConnection();
         ArrayList<LikedRestObj> likedRestObj = dbConnection.AskDataBaseLikedRestQuery(this.id);
+        dbConnection.disconnect();
         System.out.println("add rest choosed");
         Stage stage = new Stage();
         stage.initOwner(this.primaryStage);

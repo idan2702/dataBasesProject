@@ -174,6 +174,7 @@ public class AddData extends Application {
                     newErorAlert();
                 }
             }
+            dbConnection.disconnect();
         });
         hb.setSpacing(3);
 

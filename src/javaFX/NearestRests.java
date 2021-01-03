@@ -215,6 +215,8 @@ public class NearestRests extends Application {
 
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
 
+
+        stage.setOnCloseRequest( ev -> dbConnection.disconnect());
         stage.setScene(scene);
         stage.show();
     }

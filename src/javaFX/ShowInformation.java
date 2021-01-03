@@ -22,6 +22,7 @@ public class ShowInformation extends Application {
     private DataObj db;
     private String id;
     private String pass;
+    private  DbConnection dbConnection = new DbConnection();
     private ObservableList<RestaurantInfo> data =
             FXCollections.observableArrayList();
 
@@ -108,6 +109,7 @@ public class ShowInformation extends Application {
 
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
 
+        stage.setOnCloseRequest( ev -> dbConnection.disconnect());
         stage.setScene(scene);
         stage.show();
     }
@@ -130,7 +132,7 @@ public class ShowInformation extends Application {
 
                     private final Button btn = new Button("Like");
                     {
-                        DbConnection dbConnection = new DbConnection();
+
                         btn.setOnAction((ActionEvent event) -> {
                             RestaurantInfo rest = getTableView().getItems().get(getIndex());
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
