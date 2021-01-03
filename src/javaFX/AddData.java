@@ -163,7 +163,6 @@ public class AddData extends Application {
 
         stage.setOnCloseRequest( ev -> {
             for (int i = 0; i < likedRestObj.size(); i++) {
-                System.out.println(likedRestObj.get(i).getReview());
                 String sqlQuery = "UPDATE restaurants_dbs.likedrest SET Review = '" + likedRestObj.get(i).getReview() +
                         "' WHERE (userName = '" + likedRestObj.get(i).getUserName() + "') and (restName = '" + likedRestObj.get(i).getName() + "');";
                 try {
