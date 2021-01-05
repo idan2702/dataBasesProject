@@ -120,7 +120,7 @@
                </font>
             </Text>
             <TextField id="City" fx:id="City" layoutX="19.0" layoutY="143.0" prefHeight="29.0" prefWidth="220.0" />
-            <Button layoutX="29.0" layoutY="579.0" mnemonicParsing="false" onAction="#addRest" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="my favourites" textFill="#c99e9e">
+            <Button layoutX="29.0" layoutY="579.0" mnemonicParsing="false" onAction="#addRest" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="my favorites" textFill="#c99e9e">
                <graphic>
                   <ImageView fitHeight="29.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
                      <image>
