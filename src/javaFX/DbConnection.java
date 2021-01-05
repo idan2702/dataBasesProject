@@ -5,12 +5,10 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DbConnection {
-    private ArrayList<DataObj> data = new ArrayList<DataObj>();
     private Connection connection = null;
     private String dbName = "restaurants_dbs";
     private String url = "jdbc:mysql://localhost:3306/" + dbName + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private String username = "root";
-    //todo: remove password...
     private String password = "Idan2702";
 
     public DbConnection() {

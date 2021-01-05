@@ -129,6 +129,10 @@ public class Controller {
                     michelinStarsSearch = "Rate='1star'";
                     break;
             }
+        }else{
+            if(!citySearch.equals("")){
+                citySearch += " AND ";
+            }
         }
         if (cost > 0) {
             if(!michelinStarsSearch.equals("")){
