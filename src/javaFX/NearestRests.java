@@ -43,31 +43,38 @@ public class NearestRests extends Application {
         String price;
         String sqlQuery = "SELECT * FROM restaurants_dbs.restaurants JOIN restaurants_dbs.locations USING(Name)";
         if (lat > -200) {
-            latSearch = "Lat BETWEEN " + (lat -5) + " AND " + (lat  + 5);
+            latSearch = "Lat BETWEEN " + (lat - 5) + " AND " + (lat + 5);
         }
         if (lon > -200) {
-            if(!latSearch.equals("")){
+            if (!latSearch.equals("")) {
                 latSearch += " AND ";
             }
-            lonSearch = "Lon BETWEEN " + (lon -5) + " AND " + (lon  + 5) + " AND ";
+            lonSearch = "Lon BETWEEN " + (lon - 5) + " AND " + (lon + 5) ;
         }
         if (!this.city.equals("")) {
-            if(!lonSearch.equals("")){
+            if (!lonSearch.equals("")) {
                 lonSearch += " AND ";
+            }else if(!latSearch.equals("")) {
+                latSearch += " AND ";
             }
             citySearch = "City ='" + city + "'";
         }
         if (!this.country.equals("")) {
-            if(!citySearch.equals("")){
-                citySearch +=" AND ";
+            if (!citySearch.equals("")) {
+                citySearch += " AND ";
+            }else if (!lonSearch.equals("")) {
+                    lonSearch += " AND ";
+            }else if(!latSearch.equals("")) {
+                    latSearch += " AND ";
+
             }
             countrySearch = "Country ='" + country + "'";
         }
         if (!countrySearch.equals("") || !citySearch.equals("") || !lonSearch.equals("") || !latSearch.equals("")) {
-            sqlQuery = sqlQuery + " WHERE " + latSearch + lonSearch + citySearch + countrySearch +";";
+            sqlQuery = sqlQuery + " WHERE " + latSearch + lonSearch + citySearch + countrySearch + ";";
         }
         ArrayList<DataObj> list = dbConnection.AskDataBaseQuery(sqlQuery);
-        ObservableList<nearRestaurantInfo> temp =  FXCollections.observableArrayList();
+        ObservableList<nearRestaurantInfo> temp = FXCollections.observableArrayList();
         int counter = 0;
         for (DataObj d : list) {
             switch (d.getCost()) {
@@ -90,11 +97,11 @@ public class NearestRests extends Application {
                     price = "$ - Cheap";
                     break;
             }
-            temp.add(new nearRestaurantInfo(price,d.getCountry(), d.getCity(), d.getName(), d.getCouisine()));
-            if(counter == 150){
+            temp.add(new nearRestaurantInfo(price, d.getCountry(), d.getCity(), d.getName(), d.getCouisine()));
+            if (counter == 150) {
                 break;
             }
-            counter ++;
+            counter++;
         }
         this.data = temp;
         table.setItems(data);
@@ -114,7 +121,6 @@ public class NearestRests extends Application {
         label.setFont(new Font("Arial", 20));
 
 
-
         TableColumn CountryCol = new TableColumn("Country");
         CountryCol.setMinWidth(200);
         CountryCol.setCellValueFactory(
@@ -127,12 +133,10 @@ public class NearestRests extends Application {
                 new PropertyValueFactory<nearRestaurantInfo, String>("city"));
 
 
-
         TableColumn NameCol = new TableColumn("Name");
         NameCol.setMinWidth(200);
         NameCol.setCellValueFactory(
                 new PropertyValueFactory<nearRestaurantInfo, String>("name"));
-
 
 
         TableColumn CuisineCol = new TableColumn("Cuisine");
@@ -147,9 +151,8 @@ public class NearestRests extends Application {
                 new PropertyValueFactory<nearRestaurantInfo, String>("Price"));
 
 
-
         table.setItems(data);
-        table.getColumns().addAll(PriceCol,CountryCol,CityCol, NameCol, CuisineCol);
+        table.getColumns().addAll(NameCol, PriceCol, CountryCol, CityCol, CuisineCol);
 
         final TextField addCountry = new TextField();
         addCountry.setPromptText("Country");
@@ -175,25 +178,25 @@ public class NearestRests extends Application {
         final Button addButton = new Button("Search");
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent e){
+            public void handle(ActionEvent e) {
                 try {
                     lat = Double.parseDouble(addLatitude.getText());
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     lat = -200;
                 }
                 try {
                     lon = Double.parseDouble(addLongitude.getText());
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     lon = -200;
                 }
-                try{
+                try {
                     city = addCity.getText();
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     city = "";
                 }
-                try{
+                try {
                     country = addCountry.getText();
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     country = "";
                 }
 
@@ -205,7 +208,7 @@ public class NearestRests extends Application {
             }
         });
 
-        hb.getChildren().addAll(addCountry,addCity, addLatitude, addLongitude, addButton);
+        hb.getChildren().addAll(addCountry, addCity, addLatitude, addLongitude, addButton);
         hb.setSpacing(3);
 
         final VBox vbox = new VBox();
@@ -216,7 +219,7 @@ public class NearestRests extends Application {
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
 
 
-        stage.setOnCloseRequest( ev -> dbConnection.disconnect());
+        stage.setOnCloseRequest(ev -> dbConnection.disconnect());
         stage.setScene(scene);
         stage.show();
     }
@@ -228,7 +231,7 @@ public class NearestRests extends Application {
         private final SimpleStringProperty name;
         final SimpleStringProperty cuisine;
 
-        public nearRestaurantInfo(String price,String country, String city, String name, String cuisine) {
+        public nearRestaurantInfo(String price, String country, String city, String name, String cuisine) {
             this.country = new SimpleStringProperty(country);
             this.price = new SimpleStringProperty(price);
             this.city = new SimpleStringProperty(city);
@@ -237,6 +240,7 @@ public class NearestRests extends Application {
 
 
         }
+
         public String getCountry() {
             return country.get();
         }

@@ -91,7 +91,6 @@ public class Controller {
                 price = 1;
                 break;
         }
-        System.out.println(priceChoice.getValue());
     }
 
 
@@ -114,6 +113,10 @@ public class Controller {
         if (michelinStars >= 1) {
             if(!citySearch.equals("")){
                 citySearch += " AND ";
+            }else{
+                if(!countrySearch.equals("")){
+                    countrySearch += " AND ";
+                }
             }
             switch (michelinStars) {
                 case 1:
@@ -129,14 +132,18 @@ public class Controller {
                     michelinStarsSearch = "Rate='1star'";
                     break;
             }
-        }else{
-            if(!citySearch.equals("")){
-                citySearch += " AND ";
-            }
         }
         if (cost > 0) {
             if(!michelinStarsSearch.equals("")){
                 michelinStarsSearch += " AND ";
+            }else{
+                if(!citySearch.equals("")){
+                    citySearch += " AND ";
+                }else{
+                    if(!countrySearch.equals("")){
+                        countrySearch += " AND ";
+                    }
+                }
             }
             costSearch = "Cost =" + cost + " ";
         }
@@ -177,7 +184,7 @@ public class Controller {
     private void setEveryDayRest(ActionEvent event) {
         event.consume();
         this.michelinStars = 0;
-        System.out.println("standart rest choosed");
+        System.out.println("every kind rest selected");
 
     }
 
@@ -187,7 +194,7 @@ public class Controller {
         DbConnection dbConnection = new DbConnection();
         ArrayList<LikedRestObj> likedRestObj = dbConnection.AskDataBaseLikedRestQuery(this.id);
         dbConnection.disconnect();
-        System.out.println("add rest choosed");
+        System.out.println("add rest selected");
         Stage stage = new Stage();
         stage.initOwner(this.primaryStage);
 
@@ -199,7 +206,7 @@ public class Controller {
     @FXML
     private void getNearRest(ActionEvent event) throws Exception {
         event.consume();
-        System.out.println("near rest choosed");
+        System.out.println("near rest selected");
 
         Stage stage = new Stage();
         stage.initOwner(this.primaryStage);

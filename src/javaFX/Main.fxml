@@ -11,7 +11,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -29,7 +32,7 @@
                   </Label>
                </children>
             </Pane>
-            <VBox layoutX="1.0" layoutY="259.0" prefHeight="326.0" prefWidth="256.0" AnchorPane.bottomAnchor="137.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="259.0">
+            <VBox layoutX="-1.0" layoutY="259.0" prefHeight="465.0" prefWidth="257.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="259.0">
                <children>
                   <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#setEveryDayRest" prefHeight="44.0" prefWidth="255.0" styleClass="button1" stylesheets="@../css/fullpackstyling.css" text="every kind of restaurant" textFill="#c99e9e">
                      <graphic>
@@ -84,28 +87,48 @@
                         <Insets left="10.0" top="5.0" />
                      </VBox.margin>
                   </Text>
-                  <ChoiceBox id="priceChoice" onAction="#priceSelectionModified" prefHeight="26.0" prefWidth="234.0" value="2 minutes">
-                     <items>
-                        <FXCollections fx:factory="observableArrayList">
-                           <String fx:value="$ - Cheap" />
-                           <String fx:value="$$ - Not Expensive" />
-                           <String fx:value="$$$ - Expensive" />
-                           <String fx:value="$$$$ - Very Expensive" />
-                           <String fx:value="$$$$$- Extremely Expensive" />
-                        </FXCollections>
-                     </items>
-                     <VBox.margin>
-                        <Insets left="10.0" top="10.0" />
-                     </VBox.margin>
-                  </ChoiceBox>
-                  <Text fill="#c99e9e" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Restaurant:" wrappingWidth="204.73928833007812">
-                     <font>
-                        <Font name="System Bold" size="19.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" top="10.0" />
-                     </VBox.margin>
-                  </Text>
+                  <GridPane prefHeight="79.0" prefWidth="256.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="215.66665649414062" minWidth="10.0" prefWidth="188.3333536783854" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="123.0" minWidth="10.0" prefWidth="67.99997965494791" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button id="setRestSelectionBtn" fx:id="setRestSelectionBtn" mnemonicParsing="false" onAction="#setRestSelection" prefHeight="36.0" prefWidth="52.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="set" textFill="#c99e9e" GridPane.columnIndex="1">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="8.0" />
+                           </GridPane.margin>
+                        </Button>
+                        <ChoiceBox id="priceChoice" onAction="#priceSelectionModified" prefHeight="26.0" prefWidth="174.0" value="2 minutes">
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="$ - Cheap" />
+                                 <String fx:value="$$ - Not Expensive" />
+                                 <String fx:value="$$$ - Expensive" />
+                                 <String fx:value="$$$$ - Very Expensive" />
+                                 <String fx:value="$$$$$- Extremely Expensive" />
+                              </FXCollections>
+                           </items>
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </ChoiceBox>
+                        <Text fill="#c99e9e" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Restaurant:" wrappingWidth="168.0726318359375" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="System Bold" size="19.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="10.0" />
+                           </GridPane.margin>
+                        </Text>
+                     </children>
+                  </GridPane>
                </children>
             </VBox>
             <TextField id="Countries" fx:id="Countries" layoutX="19.0" layoutY="76.0" prefHeight="29.0" prefWidth="220.0" />
@@ -120,26 +143,25 @@
                </font>
             </Text>
             <TextField id="City" fx:id="City" layoutX="19.0" layoutY="143.0" prefHeight="29.0" prefWidth="220.0" />
-            <Button layoutX="29.0" layoutY="579.0" mnemonicParsing="false" onAction="#addRest" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="my favorites" textFill="#c99e9e">
-               <graphic>
-                  <ImageView fitHeight="29.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Images/addrest.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button id="Get_Extra_Information_btn" fx:id="Get_Extra_Information_btn" layoutX="29.0" layoutY="625.0" mnemonicParsing="false" onAction="#getExtraInformationbtn" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="Get Extra Information" textFill="#c99e9e" />
-            <ChoiceBox id="restSelection" fx:id="restSelection" layoutX="12.0" layoutY="543.0" onAction="#restSelectionModified" prefHeight="15.0" prefWidth="188.0">
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-            </ChoiceBox>
-            <Button id="setRestSelectionBtn" fx:id="setRestSelectionBtn" layoutX="207.0" layoutY="535.0" mnemonicParsing="false" onAction="#setRestSelection" prefHeight="36.0" prefWidth="42.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="set" textFill="#c99e9e">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
+            <Pane layoutX="-7.0" layoutY="541.0" prefHeight="182.0" prefWidth="265.0">
+               <children>
+                  <Button id="Get_Extra_Information_btn" fx:id="Get_Extra_Information_btn" layoutX="32.0" layoutY="82.0" mnemonicParsing="false" onAction="#getExtraInformationbtn" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="Get Extra Information" textFill="#c99e9e" />
+                  <Button layoutX="32.0" layoutY="38.0" mnemonicParsing="false" onAction="#addRest" prefHeight="37.0" prefWidth="200.0" styleClass="button4" stylesheets="@../css/fullpackstyling.css" text="my favorites" textFill="#c99e9e">
+                     <graphic>
+                        <ImageView fitHeight="29.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Images/addrest.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <ChoiceBox id="restSelection" fx:id="restSelection" layoutX="18.0" layoutY="1.0" onAction="#restSelectionModified" prefHeight="26.0" prefWidth="228.0">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </ChoiceBox>
+               </children>
+            </Pane>
          </children>
          <opaqueInsets>
             <Insets />
