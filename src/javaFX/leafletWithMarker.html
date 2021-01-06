@@ -19,7 +19,6 @@
 
 	var map = L.map('map').setView([32, 34], 2);  
 	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); 
-    var marker = L.marker([48.25406, 16.35915]).addTo(map);
 
     function onEachFeature(feature, layer) {
         if (feature.properties) {

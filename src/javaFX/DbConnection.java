@@ -39,7 +39,7 @@ public class DbConnection {
             DataObj dataObj = new DataObj(resultSet.getDouble(3), resultSet.getDouble(4),
                     resultSet.getInt(6), resultSet.getString(5),
                     resultSet.getString(8), resultSet.getString(7),
-                    resultSet.getString(1), resultSet.getString(11),
+                    resultSet.getString(2), resultSet.getString(11),
                     resultSet.getString(10));
             data.add(dataObj);
         }

@@ -93,13 +93,12 @@ public class Controller {
         }
     }
 
-
     private ArrayList<DataObj> SetRestSelection(String city, String country, int michelinStars, int cost) {
         String countrySearch = "";
         String citySearch = "";
         String michelinStarsSearch = "";
         String costSearch = "";
-        String sqlQuery = "SELECT * FROM restaurants_dbs.restaurants JOIN restaurants_dbs.locations USING(Name)";
+        String sqlQuery = "SELECT * FROM restaurants_dbs.restaurants JOIN restaurants_dbs.locations USING(Id)";
 
         if (!country.equals("")) {
             countrySearch = "Country ='" + country + "'";
@@ -123,10 +122,10 @@ public class Controller {
                     michelinStarsSearch = "Rate='1star'";
                     break;
                 case 2:
-                    michelinStarsSearch = "Rate='2stars'";
+                    michelinStarsSearch = "Rate='2star'";
                     break;
                 case 3:
-                    michelinStarsSearch = "Rate='3stars'";
+                    michelinStarsSearch = "Rate='3star'";
                     break;
                 default:
                     michelinStarsSearch = "Rate='1star'";
@@ -247,7 +246,7 @@ public class Controller {
             final WebView browser = new WebView();
             final WebEngine webEngine = browser.getEngine();
             try {
-                if (this.db.getUrl() != null) {
+                if (!this.db.getUrl().equals("null")) {
                     webEngine.load(this.db.getUrl());
                 } else {
                     f = new File("src/javaFX/404.html");

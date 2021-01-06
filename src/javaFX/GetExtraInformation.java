@@ -107,8 +107,9 @@ public class GetExtraInformation extends Application {
                 } catch (Exception E) {
                 }
                 try {
-                    String sqlQuery = "SELECT Cost,Rate,Name,Cuisine FROM restaurants_dbs.restaurants WHERE rate !=" +
-                            " '1star' AND  Rate != '2stars' AND Rate != '3stars' order by cost asc limit 20;";
+                    String sqlQuery = "SELECT Cost,Rate,Name,Cuisine FROM restaurants_dbs.restaurants" +
+                            " WHERE  Cost =(SELECT min(Cost) AS price FROM restaurants_dbs.restaurants) and" +
+                            " Rate != '3star'  and Rate != '2star'  and Rate != '1star' group by Name limit 20;";
                     ArrayList<priceRestData> list = dbConnection.AskDataBaseQueryforPriceExtraInformation(sqlQuery);
                     ObservableList<priceRestData> temp = FXCollections.observableArrayList();
                     for (int i = 0; i < list.size(); i++) {
@@ -133,8 +134,9 @@ public class GetExtraInformation extends Application {
                 } catch (Exception E) {
                 }
                 try {
-                    String sqlQuery = "SELECT Cost,Rate,Name,Cuisine FROM restaurants_dbs.restaurants WHERE rate" +
-                            " = '3stars' order by cost desc limit 20;";
+                    String sqlQuery = "SELECT Cost,Rate,Name,Cuisine FROM restaurants_dbs.restaurants WHERE" +
+                            " Cost =(SELECT max(Cost) AS price FROM restaurants_dbs.restaurants ) and rate= '3star' " +
+                            " group by Name limit 20;";
                     ArrayList<priceRestData> list = dbConnection.AskDataBaseQueryforPriceExtraInformation(sqlQuery);
                     ObservableList<priceRestData> temp = FXCollections.observableArrayList();
                     for (int i = 0; i < list.size(); i++) {

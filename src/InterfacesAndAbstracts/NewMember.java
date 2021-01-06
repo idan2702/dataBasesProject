@@ -1,8 +1,5 @@
 package InterfacesAndAbstracts;
-
-import javaFX.DataObj;
 import javaFX.DbConnection;
-
 import java.util.ArrayList;
 
 abstract public class NewMember {

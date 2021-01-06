@@ -41,7 +41,7 @@ public class NearestRests extends Application {
         String latSearch = "";
         String lonSearch = "";
         String price;
-        String sqlQuery = "SELECT * FROM restaurants_dbs.restaurants JOIN restaurants_dbs.locations USING(Name)";
+        String sqlQuery = "SELECT * FROM restaurants_dbs.restaurants JOIN restaurants_dbs.locations USING(Id)";
         if (lat > -200) {
             latSearch = "Lat BETWEEN " + (lat - 5) + " AND " + (lat + 5);
         }
