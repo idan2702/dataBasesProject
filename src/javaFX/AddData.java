@@ -121,11 +121,11 @@ public class AddData extends Application {
     @Override
     public void start(Stage stage) {
         Scene scene = new Scene(new Group());
-        stage.setTitle("Your Favourites");
+        stage.setTitle("Your Favorites");
         stage.setWidth(935);
         stage.setHeight(550);
         setdataArrayFromDb();
-        final Label label = new Label("Your Favourites");
+        final Label label = new Label("Your Favorites");
         label.setFont(new Font("Arial", 20));
 
         table.setEditable(true);
