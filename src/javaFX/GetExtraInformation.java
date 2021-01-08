@@ -40,7 +40,7 @@ public class GetExtraInformation extends Application {
         stage.setWidth(735);
         stage.setHeight(550);
 
-        final Label label = new Label("Near Restaurants");
+        final Label label = new Label("Extra Information");
         label.setFont(new Font("Arial", 20));
 
         tableRests.setEditable(true);
