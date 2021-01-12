@@ -141,14 +141,13 @@ public class ShowInformation extends Application {
                             try {
                                 if (!checkIfRestaurantLikesBefore(dbConnection)) {
                                     alert.setContentText("You liked \"" + rest.getName() + "\"");
-                                    btn.setText("Unlike");
                                     btn.minWidth(100);
                                     String query = "INSERT INTO `restaurants_dbs`.`likedrest` (`userName`, `restName`, `Like`, `Review`) VALUES ('"
                                             + id + "', '" + db.getName() + "', 'yes', 'empty');";
 
                                     try{
                                         if(dbConnection.AddtoDataBase(query)){
-
+                                            btn.setText("Unlike");
                                         }else{
                                             alert = new Alert(Alert.AlertType.INFORMATION);
                                             alert.setTitle("error!");

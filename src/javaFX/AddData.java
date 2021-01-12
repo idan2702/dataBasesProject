@@ -62,8 +62,8 @@ public class AddData extends Application {
                                 alert.setHeaderText(null);
                                 alert.setContentText("You unliked \"" + rest.getName() + "\"");
                                 btn.minWidth(100);
-                                String query = "DELETE FROM `restaurants_dbs`.`likedrest` WHERE (`userName` = '"
-                                        +likedRestObj.get(index_to_remove).getUserName()+"')"+"and (`restName` = '"+likedRestObj.get(index_to_remove).getName()+"');";
+                                String query = "DELETE FROM restaurants_dbs.likedrest WHERE (userName = '"
+                                        +likedRestObj.get(index_to_remove).getUserName()+"')"+"and (restName = '"+likedRestObj.get(index_to_remove).getName()+"');";
                                 try {
                                     if(!dbConnection.deleteValInDataBase(query)){
                                         newErorAlert();
